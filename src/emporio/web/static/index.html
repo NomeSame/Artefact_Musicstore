@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#203d34">
+<title>Empório da Música · Find your next sound</title>
+<link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/static/styles.css">
+<script type="module" src="/static/main.js"></script>
+</head>
+<body>
+<header class="masthead">
+  <a class="brand" href="/" aria-label="Empório da Música home"><span class="brandmark">e<span>m</span></span><span>empório<span class="brand-sub">DA MÚSICA</span></span></a>
+  <span class="header-note">Good instruments. Great beginnings.</span>
+  <div class="header-actions"><span class="location"><span class="status-dot"></span> Campo Grande, BR</span><button class="quiet-button" id="open-settings">Connect a model <span aria-hidden="true">↗</span></button></div>
+</header>
+<div class="workspace">
+<aside class="sidebar" aria-label="Catalogue categories">
+  <div class="sidebar-heading">THE COLLECTION <span>01—09</span></div>
+  <nav id="categories"></nav>
+  <div class="sidebar-bottom"><span class="tiny-wave">∿∿∿</span><p>For the first chord.<br>And everything after.</p><span class="sidebar-footnote">INSTRUMENTS ONLY · SINCE 2008</span></div>
+</aside>
+<main class="catalogue">
+  <section class="intro">
+    <div class="eyebrow"><span class="orange-line"></span> YOUR NEXT CHAPTER STARTS HERE</div>
+    <div class="intro-row"><h1>Find your<br><em>next sound.</em></h1><p>A first guitar. A new direction.<br>Find an instrument that feels<br>like it was made for you.</p></div>
+    <div class="collection-meta"><span><strong id="total-count">65</strong> instruments, plenty of possibilities</span><span>CURATED IN CAMPO GRANDE <span aria-hidden="true">↗</span></span></div>
+  </section>
+  <section aria-labelledby="catalogue-title">
+    <div class="catalogue-title-row"><h2 id="catalogue-title">All instruments</h2><span class="result-count" id="result-count" aria-live="polite">Loading collection…</span></div>
+    <div class="filters">
+      <label class="search"><span aria-hidden="true">⌕</span><input type="search" id="search" placeholder="Find a brand or instrument" aria-label="Search instruments"></label>
+      <label class="sort-label"><span class="sr-only">Sort instruments</span><select id="sort"><option value="recommended">Recommended</option><option value="price_asc">Price, low to high</option><option value="price_desc">Price, high to low</option></select></label>
+      <button class="filter-button" id="toggle-filters" aria-expanded="false" aria-controls="extra-filters">Filters <span aria-hidden="true">☷</span></button>
+    </div>
+    <div class="extra-filters" id="extra-filters" hidden>
+      <label>Maximum price in BRL<input id="max-price" type="number" min="0" max="10000000" placeholder="Any price"></label>
+      <label>Payment<select id="payment"><option value="unspecified">Not chosen</option><option value="pix">Full PIX payment</option><option value="card">Credit card</option><option value="debit">Debit card</option><option value="boleto">Boleto</option></select></label>
+      <label class="check-label"><input type="checkbox" id="available-only"> In stock only</label>
+      <button class="text-button" id="reset-filters">Reset</button>
+    </div>
+    <div id="products" class="product-grid" aria-live="polite"></div>
+    <div id="empty" class="empty-state" hidden><span aria-hidden="true">∿</span><h3>No instruments in this mix.</h3><p>Try another search or give your budget a little more room.</p><button class="primary-button" id="clear-search">Clear filters</button></div>
+    <footer class="catalogue-footer"><span>Instrument illustrations · supplied catalogue data</span><span>Prices in BRL · discounts never stack</span></footer>
+  </section>
+</main>
+<aside class="assistant-panel" aria-label="Store assistant">
+  <div class="assistant-header"><div class="assistant-avatar">♪</div><div><h2>Your music guide</h2><div class="mode-label" id="mode-label"><span class="status-dot"></span> Catalogue preview</div></div><button class="icon-button" id="chat-menu" aria-label="Show chat actions" aria-expanded="false">···</button></div>
+  <div class="chat-actions" id="chat-actions" hidden><button id="export-chat">Download conversation .md</button><button id="reset-chat">Start a new conversation</button><button id="open-tools">Explore agent tools</button></div>
+  <div class="context-strip" id="context-strip"><span>Browsing</span><strong id="context-label">All instruments</strong></div>
+  <div class="chat-messages" id="messages" role="log" aria-live="polite">
+    <div class="message assistant-message"><div class="message-meta">EMPÓRIO GUIDE</div><p>Every great sound starts somewhere. What are you looking for?</p><p class="muted">Browse the collection or try one of these starting points.</p></div>
+    <div class="suggestions" id="suggestions"><button data-prompt="Show acoustic guitars under R$1000">Acoustic guitars under R$1,000 <span>↗</span></button><button data-prompt="Show available pianos">Explore keys & pianos <span>↗</span></button><button data-prompt="What are the return rules?">How do returns work? <span>↗</span></button></div>
+  </div>
+  <div class="selected-context" id="selected-context" hidden><span>Asking about <strong id="selected-name"></strong></span><button id="clear-selection" class="icon-button" aria-label="Clear selected instrument">×</button></div>
+  <div class="chat-compose">
+    <div id="preview-note" class="preview-note">Preview uses fixed tools. <button class="text-button" id="connect-inline">Connect an LLM</button> for free-form questions.</div>
+    <form id="chat-form"><label class="sr-only" for="chat-input">Message the store assistant</label><textarea id="chat-input" placeholder="Ask about an instrument…" rows="2" maxlength="3000" required></textarea><button id="send-button" type="submit" aria-label="Send message">↑</button></form>
+    <div class="chat-footnote"><span>Snapshot data, not a live store</span><button class="text-button" id="order-lookup">Track an order ↗</button></div>
+  </div>
+</aside>
+</div>
+<dialog id="settings-dialog" class="settings-dialog">
+  <form id="settings-form">
+    <div class="dialog-top"><span class="eyebrow">MAKE IT YOUR OWN</span><button type="button" class="icon-button close-dialog" aria-label="Close settings">×</button></div>
+    <h2>Connect your model.</h2><p>Use an OpenAI-compatible Chat Completions endpoint. Credentials stay in this server session and are cleared on restart or after inactivity.</p>
+    <label>Connection preset<select id="provider-preset"><option value="custom">Custom endpoint</option><option value="http://localhost:1234/v1">LM Studio · local</option><option value="http://localhost:8080/v1">llama.cpp · local</option><option value="http://localhost:11434/v1">Ollama · local</option><option value="https://api.openai.com/v1">OpenAI</option></select></label>
+    <label>API base URL<input type="url" id="base-url" placeholder="http://localhost:1234/v1"></label>
+    <label>API key<input type="password" id="api-key" autocomplete="off" placeholder="Leave empty to keep the session key"></label>
+    <label class="check-label"><input type="checkbox" id="no-key"> This endpoint does not need a key</label>
+    <div class="model-field"><label>Model ID<input id="model-id" list="model-options" placeholder="Qwen3.6-35B-A3B"><datalist id="model-options"></datalist></label><button type="button" id="load-models" class="secondary-button">Load models</button></div>
+    <p class="field-note">Model discovery may be unavailable. You can always enter the ID manually. A model list alone does not verify tool support. The API address must be reachable from the Python process, including from Ubuntu when using WSL.</p>
+    <div id="settings-message" class="inline-message" role="status"></div>
+    <div class="dialog-footer"><button type="button" id="use-preview" class="text-button">Use catalogue preview</button><button type="submit" class="primary-button">Save connection ↗</button></div>
+  </form>
+</dialog>
+<dialog id="product-dialog" class="product-dialog"><button class="icon-button close-dialog product-close" aria-label="Close instrument details">×</button><div id="product-detail"></div></dialog>
+<dialog id="order-dialog" class="settings-dialog">
+  <form id="order-form"><div class="dialog-top"><span class="eyebrow">YOUR ORDER</span><button type="button" class="icon-button close-dialog" aria-label="Close order lookup">×</button></div><h2>Let's find your order.</h2><p>Enter the order number and matching email from the supplied sample data. This prototype check is not production authentication.</p><label>Order number<input type="number" min="1" id="order-id" required></label><label>Email address<input type="email" id="order-email" required autocomplete="off"></label><div id="order-result" class="inline-message" role="status"></div><div class="dialog-footer"><button type="submit" class="primary-button">Look up order ↗</button></div></form>
+</dialog>
+<dialog id="tools-dialog" class="tools-dialog"><div class="dialog-top"><span class="eyebrow">SHARED ACTIONS</span><button class="icon-button close-dialog" aria-label="Close tool documentation">×</button></div><h2>A window into the agent.</h2><p>The browser and model use the same validated functions. Public read tools are also exposed through a local MCP stdio adapter.</p><div id="tool-list"></div></dialog>
+<div class="toast" id="toast" role="status" hidden></div>
+</body></html>

@@ -1,4 +1,4 @@
-﻿# Internal Markdown stays local. Required submission documents remain tracked.
+# Internal Markdown stays local. Required submission documents remain tracked.
 *.md
 !README.md
 !examples/**/*.md
@@ -12,3 +12,12 @@
 __pycache__/
 *.py[cod]
 .pytest_cache/
+
+.venv-win/
+.runtime/
+playwright-report/
+test-results/
+
+*.egg-info/
+build/
+dist/
