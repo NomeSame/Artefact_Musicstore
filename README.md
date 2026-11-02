@@ -1,0 +1,25 @@
+﻿# Empório da Música
+
+Artefact_Musicstore is a customer service agent project for Artefact's AI Engineer challenge. It will help customers find musical instruments, check prices and availability, follow orders and understand the store's payment, delivery and return policies. The implementation concept is agreed, but the application has not been built yet. This repository currently contains the supplied challenge materials and an initial README.
+
+Python will connect a browser interface, a language model and SQLite. The model will interpret questions and request documented tools, while Python will validate their arguments and execute them. Product and order information will come from SQL queries. Product cards and controlled response templates will display prices and availability without requiring another free-form model response.
+
+The interface will place a clickable instrument catalogue beside a smaller chat panel. Each message can include the current category, selected product and active filters. An explicitly named instrument takes precedence over navigation context, and an ambiguous reference will prompt a question. The agent will interact with the interface through actions such as searching or selecting a product. Pixel-based browser automation is outside the initial approach. The visual design remains open.
+
+The same underlying functions will serve the interface and the agent. Each tool will have a description, defined inputs, results and error states. A thin local MCP adapter is part of the implementation concept and will expose these functions without duplicating business rules. The application and adapter can run on the user's computer without rented server infrastructure.
+
+The store manual will initially be searched by section to retrieve the relevant rules before answering. This is retrieval-augmented generation, or RAG. A vector database is not required by the concept. Calculations and clear business rules will run in code, while explanations may use the model with retrieved evidence.
+
+The supplied data is a snapshot, so querying it during a conversation does not provide a live connection to a store or carrier. Missing information must lead to a question or an explicit limitation. For example, an estimated delivery date does not establish when an order was actually received. The manual also contains conflicting contact details and unclear boundary cases. Interpretations will be recorded before they influence customer answers.
+
+The system will choose the highest applicable individual discount and will never stack discounts. The 5% PIX discount will be compared with active product promotions when the store receives the full amount immediately through PIX. External financing between the customer and their bank will not automatically exclude this discount if the store still receives the full PIX payment. A higher active promotion replaces the 5% discount. Scheduled payments, instalments paid directly to the store and mixed payment methods will not automatically count as full immediate PIX payment. These interpretations extend the manual where it does not define the comparison or financing case explicitly.
+
+The provider configuration will accept a base URL, an optional API key and a model ID. It will offer a model picker when the server supports model discovery and retain manual entry as a fallback. Local endpoints without authentication are included in the intended scope. Qwen3.6-35B-A3B is the reference candidate for initial evaluation, with models of similar or higher relevant capability as the target class. Compatibility will be established through the same shop scenarios for each tested configuration.
+
+There are no installation, execution or test commands yet because the application has not been implemented. Before delivery, this README will include the validated Python version, dependencies, data preparation, provider settings and commands actually used to run and test the project. Real credentials will stay outside the repository and conversation examples.
+
+Three to five real conversations will be recorded in Markdown under `examples/`, with screenshots where useful. Explanations will be in English, and Portuguese customer messages may be preserved with English translations. At least one conversation will demonstrate a non-trivial data query or application of store rules. No agent conversations or evaluation results have been produced yet.
+
+At this stage, I used Codex to inspect the challenge and supplied data, discuss the architecture and prepare documentation from my questions and writing references. No application code has been generated. This account will be updated as implementation proceeds to distinguish assistance, decisions and verified results.
+
+The remaining choices include the framework, model provider, MCP transport, visual design and customer identification for order queries. The final submission will follow the recruiting email's English-language requirement and Google Forms delivery route, while retaining the public repository and examples required by the challenge brief.

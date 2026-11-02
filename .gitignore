@@ -1,0 +1,14 @@
+﻿# Internal Markdown stays local. Required submission documents remain tracked.
+*.md
+!README.md
+!examples/**/*.md
+!examples/*.md
+
+# Local credentials and generated Python files
+.env
+.env.*
+!.env.example
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
