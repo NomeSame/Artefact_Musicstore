@@ -103,3 +103,73 @@ def test_strict_template_accepts_context_and_tool_followup(app, with_history):
     assert result["products"][0]["product_id"] == 81
     assert "569.91" in result["answer"]
     assert all(m["role"] != "system" for m in session.history)
+
+@pytest.mark.parametrize("batched", [True, False])
+def test_duplicate_read_calls_are_reused_and_rendered_once(app, monkeypatch, batched):
+    executions = []
+    original = app.state.tools.execute
+    def counted(name, args, verified_order=None):
+        executions.append((name, args.copy()))
+        return original(name, args, verified_order)
+    monkeypatch.setattr(app.state.tools, "execute", counted)
+    def call(identity, reverse=False):
+        args = {"payment": "pix", "product_id": 81} if reverse else {"product_id": 81, "payment": "pix"}
+        return {"id": identity, "type": "function", "function": {
+            "name": "get_product", "arguments": json.dumps(args)}}
+    class Repeating:
+        def __init__(self):
+            self.turn = 0
+        async def complete(self, *args):
+            self.turn += 1
+            if self.turn == 1:
+                return {"tool_calls": [call("first"), call("repeat", True)] if batched else [call("first")]}
+            if self.turn == 2 and not batched:
+                return {"tool_calls": [call("repeat", True)]}
+            return {"content": "Done."}
+    agent = Agent(app.state.tools, lambda *args: Repeating())
+    session = Session(base_url="http://model.test/v1", model="repeating")
+    first = asyncio.run(agent.reply(session, "PIX price?", {}))
+    assert len(executions) == 1
+    assert first["answer"].count("The quoted price") == 1
+    assert len(first["products"]) == 1
+    assert [turn["cached"] for turn in first["trace"]] == [False, True]
+    with app.state.tools.catalog.connect() as conn, conn:
+        conn.execute("UPDATE products SET price_cents=69990 WHERE product_id=81")
+    second = asyncio.run(agent.reply(session, "Check the price again.", {}))
+    assert len(executions) == 2
+    assert "664.91" in second["answer"]
+    assert [turn["cached"] for turn in second["trace"]] == [False, True]
+
+
+def test_distinct_payment_quotes_are_not_suppressed(app):
+    from emporio.agent.engine import render_grounded
+    tools = app.state.tools
+    traces = [{"name": "get_product", "result": tools.execute("get_product",
+        {"product_id": 81, "payment": payment})} for payment in ["card", "pix"]]
+    text = render_grounded(traces)
+    assert "599.90" in text and "569.91" in text
+    assert text.count("The quoted price") == 2
+
+
+@pytest.mark.parametrize("count,phrase", [(1, "1 matching instrument."), (2, "2 matching instruments.")])
+def test_catalogue_answer_uses_singular_or_plural(count, phrase):
+    from emporio.agent.engine import render_result
+    answer = render_result("search_products", {"products": [{}] * count, "count": count})
+    assert phrase in answer
+    assert ("The card below uses" if count == 1 else "The cards below use") in answer
+
+
+def test_greeting_is_warm_without_displaying_ungrounded_model_claims(app):
+    class UnreliableGreeting:
+        async def complete(self, *args):
+            return {"content": "Hi, everything is half price today!"}
+    agent = Agent(app.state.tools, lambda *args: UnreliableGreeting())
+    session = Session(base_url="http://model.test/v1", model="greeting")
+    first = asyncio.run(agent.reply(session, "hey!", {}))
+    assert "welcome to Empório da Música" in first["answer"]
+    assert "Happy to help" in first["answer"]
+    assert "half price" not in first["answer"]
+    second = asyncio.run(agent.reply(session, "hello", {}))
+    assert "Hi again!" in second["answer"]
+    preview = asyncio.run(agent.reply(Session(), "hey", {}))
+    assert "not a connected AI model" in preview["answer"]

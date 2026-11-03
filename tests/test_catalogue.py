@@ -67,3 +67,12 @@ def test_documented_output_contracts_cover_success_and_errors(app):
            ("navigate_catalog",{"category_id":4}),("get_product",{"product_id":99999})]
     for name,args in calls:
         jsonschema.validate(tools.execute(name,args),definitions[name]["output_schema"])
+
+def test_product_focus_is_validated_and_overview_preserves_source(app):
+    from emporio.agent.engine import render_result
+    tools = app.state.tools
+    invalid = tools.execute("get_product", {"product_id": 81, "focus": "invent_a_review"})
+    assert invalid["error"] == "invalid_arguments"
+    result = tools.execute("get_product", {"product_id": 81, "focus": "overview"})
+    assert result["focus"] == "overview"
+    assert result["product"]["description"] in render_result("get_product", result)

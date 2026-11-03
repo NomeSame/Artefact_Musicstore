@@ -18,6 +18,16 @@ def plan_preview(message, context):
     if any(w in text for w in ["order", "pedido", "tracking"]):
         match = re.search(r"\b\d+\b", text)
         return ("get_order", {"order_id": int(match.group())}) if match else (None, {})
+    if context.get("selected_product_id") and any(word in text for word in [
+        "this instrument", "selected", "specification", "materials", "electronics",
+        "sound-related", "build", "how many", "stock",
+    ]):
+        focus = ("sound" if any(w in text for w in ["sound-related", "electronics"])
+                 else "specifications" if any(w in text for w in ["specification", "materials", "build"])
+                 else "availability" if any(w in text for w in ["available", "stock", "how many"])
+                 else "price" if any(w in text for w in ["cost", "price", "pix"]) else "overview")
+        return "get_product", {"product_id": context["selected_product_id"], "focus": focus,
+                               "payment": "pix" if "pix" in text else context.get("payment", "unspecified")}
     category = next((cid for word, cid in {
         "acoustic": 5, "violao": 5, "violoes": 5, "electric": 1, "guitarra": 1,
         "piano": 4, "keyboard": 4, "teclado": 4, "drum": 3, "bateria": 3,

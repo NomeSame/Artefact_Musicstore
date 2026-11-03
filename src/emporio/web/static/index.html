@@ -21,6 +21,7 @@
   <div class="sidebar-bottom"><span class="tiny-wave">∿∿∿</span><p>For the first chord.<br>And everything after.</p><span class="sidebar-footnote">INSTRUMENTS ONLY · SINCE 2008</span></div>
 </aside>
 <main class="catalogue">
+<div id="catalogue-view">
   <section class="intro">
     <div class="eyebrow"><span class="orange-line"></span> YOUR NEXT CHAPTER STARTS HERE</div>
     <div class="intro-row"><h1>Find your<br><em>next sound.</em></h1><p>A first guitar. A new direction.<br>Find an instrument that feels<br>like it was made for you.</p></div>
@@ -43,11 +44,14 @@
     <div id="empty" class="empty-state" hidden><span aria-hidden="true">∿</span><h3>No instruments in this mix.</h3><p>Try another search or give your budget a little more room.</p><button class="primary-button" id="clear-search">Clear filters</button></div>
     <footer class="catalogue-footer"><span>Instrument illustrations · supplied catalogue data</span><span>Prices in BRL · discounts never stack</span></footer>
   </section>
+</div>
+<section id="product-page" aria-label="Instrument product page" hidden></section>
 </main>
 <aside class="assistant-panel" aria-label="Store assistant">
   <div class="assistant-header"><div class="assistant-avatar">♪</div><div><h2>Your music guide</h2><div class="mode-label" id="mode-label"><span class="status-dot"></span> Catalogue preview</div></div><button class="icon-button" id="chat-menu" aria-label="Show chat actions" aria-expanded="false">···</button></div>
   <div class="chat-actions" id="chat-actions" hidden><button id="export-chat">Download conversation .md</button><button id="reset-chat">Start a new conversation</button><button id="open-tools">Explore agent tools</button></div>
   <div class="context-strip" id="context-strip"><span>Browsing</span><strong id="context-label">All instruments</strong></div>
+  <section id="product-questions" class="product-chat-topics" aria-label="Questions about this instrument" hidden></section>
   <div class="chat-messages" id="messages" role="log" aria-live="polite">
     <div class="message assistant-message"><div class="message-meta">EMPÓRIO GUIDE</div><p>Every great sound starts somewhere. What are you looking for?</p><p class="muted">Browse the collection or try one of these starting points.</p></div>
     <div class="suggestions" id="suggestions"><button data-prompt="Show acoustic guitars under R$1000">Acoustic guitars under R$1,000 <span>↗</span></button><button data-prompt="Show available pianos">Explore keys & pianos <span>↗</span></button><button data-prompt="What are the return rules?">How do returns work? <span>↗</span></button></div>

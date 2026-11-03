@@ -103,6 +103,30 @@ def create_app(root=ROOT, db_path=None, provider_factory=Provider):
         except ValueError:
             raise HTTPException(422, "Invalid catalogue filters.") from None
 
+    @app.get("/api/products/{product_id}")
+    def product_details(product_id: int, payment: str = "unspecified"):
+        try:
+            if payment not in {"unspecified", "pix", "card", "debit", "boleto"}:
+                raise ValueError
+            product = catalog.product(product_id, payment=payment)
+        except ValueError:
+            raise HTTPException(422, "Invalid product quote settings.") from None
+        if not product:
+            raise HTTPException(404, "This instrument is not in the catalogue.")
+        buying_policies = []
+        for topic in ("delivery", "returns", "warranty"):
+            policy = policies.lookup(topic)
+            buying_policies.append({"topic": topic, "summary": policy["summary"],
+                "sources": [{"document": source["document"], "page": source["page"]}
+                            for source in policy["sources"]]})
+        return {"product": product, "policies": buying_policies}
+
+    @app.get("/products/{product_id}")
+    def product_page(product_id: int):
+        if product_id not in valid_ids:
+            raise HTTPException(404, "This instrument is not in the catalogue.")
+        return FileResponse(STATIC / "index.html")
+
     @app.get("/api/manual")
     def manual():
         return FileResponse(root / "data" / "políticas_da_loja.pdf", media_type="application/pdf")

@@ -1,4 +1,5 @@
 """A single validated tool boundary shared by the browser, agent and MCP."""
+from typing import Literal
 from pydantic import BaseModel, ConfigDict, Field, ValidationError
 from emporio.data.catalog import Catalog
 from emporio.data.policies import Policies
@@ -12,6 +13,7 @@ class SearchInput(Input):
     available_only: bool = True
     payment: str = Field(default="unspecified", pattern="^(unspecified|pix|card|debit|boleto)$")
 class ProductInput(Input):
+    focus: Literal["overview", "specifications", "sound", "availability", "price"] = "price"
     product_id: int = Field(ge=1)
     payment: str = Field(default="unspecified", pattern="^(unspecified|pix|card|debit|boleto)$")
 class PolicyInput(Input):
@@ -24,7 +26,7 @@ class NavigationInput(Input):
 
 DEFINITIONS = {
     "search_products": (SearchInput, "Find instruments by name, category, maximum BRL price and availability. Categories 1 electric guitars, 2 bass, 3 drums, 4 keys/pianos, 5 acoustic guitars, 6 woodwinds, 7 brass, 8 orchestral strings, 9 ukuleles. Use current category only for implicit references. Never invent product IDs."),
-    "get_product": (ProductInput, "Get verified product details and an exact price quote. PIX applies only when the store receives full immediate PIX payment. Never stack discounts."),
+    "get_product": (ProductInput, "Get verified details for an existing product. Choose focus overview for its description, specifications for build/materials, sound for recorded sound/electronics facts, availability for stock, or price for a quote. PIX applies only when the store receives full immediate PIX payment. Never stack discounts."),
     "lookup_policy": (PolicyInput, "Retrieve store policies with source PDF pages. Topics store, payments, returns, delivery, promotions, warranty, privacy. Use for factual policy answers."),
     "get_order": (OrderInput, "Read a specific order only after the customer has used the order number and email verification dialog. If not verified, request that dialog. Does not perform refunds, purchases or shipping updates."),
     "navigate_catalog": (NavigationInput, "Open a category or select an existing product in the visible catalogue. A selected product must belong to the requested category. This changes navigation only."),
@@ -33,7 +35,8 @@ DEFINITIONS = {
 OUTPUT_FIELDS = {
     "search_products": {"found": {"type": "boolean"}, "products": {"type": "array", "items": {"type": "object"}},
                         "count": {"type": "integer"}, "snapshot": {"type": "boolean"}, "filters": {"type": "object"}},
-    "get_product": {"found": {"type": "boolean"}, "product": {"type": ["object", "null"]}},
+    "get_product": {"found": {"type": "boolean"}, "product": {"type": ["object", "null"]},
+                    "focus": {"enum": ["overview", "specifications", "sound", "availability", "price"]}},
     "lookup_policy": {"found": {"type": "boolean"}, "topic": {"type": "string"},
                       "summary": {"type": "string"}, "sources": {"type": "array", "items": {
                           "type": "object", "required": ["document", "page", "text"],
@@ -73,8 +76,9 @@ class Tools:
             return {"found": bool(products), "products": products,
                     "count": len(products), "snapshot": True, "filters": args}
         if name == "get_product":
+            focus = args.pop("focus")
             product = self.catalog.product(**args)
-            return {"found": bool(product), "product": product}
+            return {"found": bool(product), "product": product, "focus": focus}
         if name == "lookup_policy":
             return self.policies.lookup(**args)
         if name == "get_order":

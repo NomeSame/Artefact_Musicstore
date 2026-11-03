@@ -1,5 +1,8 @@
 """Bounded agent loop and deterministic rendering of tool-backed facts."""
 import json
+import re
+from emporio.domain.product_information import product_information
+from emporio.data.catalog import normalize
 from emporio.agent.preview import plan_preview
 from emporio.integrations.provider import Provider, ProviderError
 
@@ -12,6 +15,8 @@ Ask when ambiguous. Do not claim a purchase, refund, complaint or shipment was p
 Order data needs verification through the UI. Never request passwords or card details.
 Use lookup_policy before policy explanations. Use get_product or search_products for instrument facts.
 Use navigate_catalog to fulfil requests to open a category or select a product.
+Do not repeat identical read-tool calls within a turn. Reuse the result already received.
+Greet customers warmly and naturally, without inventing store facts.
 Never give general knowledge answers outside store scope. Offer to help with instruments instead.
 No discounts stack. Use the exact tool price; external financing does not change full PIX receipt.
 Dates in the snapshot are historical, not live updates."""
@@ -31,6 +36,8 @@ def render_result(name, result):
         product = result.get("product")
         if not product:
             return "I could not find that product in the supplied catalogue."
+        if result.get("focus", "price") != "price":
+            return product_information(product, result["focus"])
         status = f"{product['stock_quantity']} in stock" if product["available"] else product["status"].replace("_", " ") if product["status"] != "active" else "out of stock"
         price = product["price_cents"] / 100
         text = f"{product['name']} is {status}. The quoted price is R$ {price:,.2f}."
@@ -42,10 +49,35 @@ def render_result(name, result):
     if name == "search_products":
         if not result.get("products"):
             return "I found no available instruments matching those filters. Try a higher budget or another category."
-        return f"I found {result['count']} matching instruments. The cards below use prices and stock from the supplied catalogue."
+        count = result["count"]
+        noun = "instrument" if count == 1 else "instruments"
+        cards = "The card below uses" if count == 1 else "The cards below use"
+        return f"I found {count} matching {noun}. {cards} prices and stock from the supplied catalogue."
     if name == "navigate_catalog":
         return "I've updated the catalogue view."
     return "Here is what I found."
+
+def friendly_fallback(message, has_history=False):
+    greeting = re.sub(r"[^\w\s]", "", normalize(message)).strip()
+    if greeting in {"hi", "hey", "hello", "good morning", "good afternoon", "good evening",
+                    "oi", "ola", "bom dia", "boa tarde", "boa noite", "hallo", "guten tag"}:
+        if has_history:
+            return "Hi again! Happy to help. What would you like to explore next?"
+        return ("Hi, welcome to Empório da Música! Happy to help you find your next sound. "
+                "Is there an instrument you have in mind?")
+    return ("I'd be happy to help you look up an instrument, an order or a store policy. "
+            "What would you like to explore?")
+
+
+def render_grounded(trace):
+    # Keep distinct quotes (including different prices), but display identical facts once.
+    answers = []
+    for turn in trace:
+        if turn["name"] != "navigate_catalog":
+            answer = render_result(turn["name"], turn["result"])
+            if answer not in answers:
+                answers.append(answer)
+    return "\n\n".join(answers[-3:])
 
 class Agent:
     def __init__(self, tools, provider_factory=Provider):
@@ -53,9 +85,16 @@ class Agent:
 
     async def reply(self, session, message, context):
         trace, actions, products, sources = [], [], [], []
+        read_cache = {}
         def execute(name, arguments):
-            result = self.tools.execute(name, arguments, session.verified_order)
-            trace.append({"name": name, "arguments": arguments, "result": result})
+            # Request-local only. A later user message always reads fresh data.
+            key = (name, json.dumps(arguments, sort_keys=True, separators=(",", ":")))
+            cacheable = name in {"search_products", "get_product", "lookup_policy", "get_order"}
+            cached = cacheable and key in read_cache
+            result = read_cache[key] if cached else self.tools.execute(name, arguments, session.verified_order)
+            if cacheable:
+                read_cache[key] = result
+            trace.append({"name": name, "arguments": arguments, "result": result, "cached": cached})
             if result.get("action"):
                 actions.append(result["action"])
             if result.get("products"):
@@ -90,12 +129,11 @@ class Agent:
                 if not calls:
                     grounded = [t for t in trace if t["name"] != "navigate_catalog"]
                     if grounded:
-                        answer = "\n\n".join(render_result(t["name"], t["result"]) for t in grounded[-3:])
+                        answer = render_grounded(trace)
                     elif trace:
                         answer = render_result(trace[-1]["name"], trace[-1]["result"])
                     else:
-                        answer = ("I can help with our instruments, orders and store policies. "+
-                                  "Which instrument or store question would you like me to look up?")
+                        answer = friendly_fallback(message, bool(session.history))
                     if not isinstance(answer, str):
                         raise ProviderError("The model returned unsupported message content.")
                     break
@@ -120,7 +158,8 @@ class Agent:
         session.history = session.history[-20:]
         result = {"answer": answer, "mode": "preview" if preview else "model",
                   "products": list({p["product_id"]: p for p in products}.values()),
-                  "sources": sources, "actions": actions, "trace": trace}
+                  "sources": list({(s["document"], s["page"]): s for s in sources}.values()),
+                  "actions": actions, "trace": trace}
         session.transcript.append({"user": message, "answer": answer, "mode": result["mode"],
                                    "model": session.model if not preview else None,
                                    "context": context, "tools": [t["name"] for t in trace]})

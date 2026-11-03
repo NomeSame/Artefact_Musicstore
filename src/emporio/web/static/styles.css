@@ -8,3 +8,50 @@ dialog{border:1px solid var(--line);border-radius:10px;color:var(--ink);backgrou
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
 
 @media(max-width:500px){.intro-row>p{display:none}.intro h1{font-size:58px;margin-top:24px}.extra-filters{display:grid;grid-template-columns:1fr 1fr;gap:12px}.extra-filters input[type=number]{width:100%}.extra-filters .check-label{margin-bottom:0}.extra-filters .text-button{justify-self:end}.sidebar nav{scrollbar-width:thin}}
+.product-page-link{display:block;text-align:center;text-decoration:none}
+.detail-content .secondary-button{width:100%;margin-top:9px}
+.product-breadcrumb{display:flex;flex-wrap:wrap;gap:8px;font-size:10px;color:var(--muted);line-height:1.8;margin:0 0 20px}
+.product-breadcrumb a{text-decoration:none;color:var(--accent)}
+.back-to-collection{display:inline-block;color:var(--muted);font-size:11px;margin-bottom:24px;text-decoration:none}
+.product-page-hero{display:grid;grid-template-columns:46% minmax(0,1fr);gap:30px;align-items:start}
+.product-page-art{background:#e9e5d8;border:1px solid var(--line);border-radius:9px;min-height:450px;display:flex;align-items:center;justify-content:center;position:relative}
+.product-page-art svg{width:88%;height:350px;filter:drop-shadow(13px 17px 8px #4b392524)}
+.illustration-caption{position:absolute;bottom:14px;left:18px;font-size:8px;color:var(--muted)}
+.product-page-heading .eyebrow{color:var(--accent);margin-top:9px;font-size:8px;line-height:1.8}
+.product-page-heading h1{font-family:var(--serif);font-weight:400;font-size:clamp(30px,2.8vw,44px);line-height:1.12;letter-spacing:-1px;margin:14px 0 20px}
+.product-stock{font-size:11px;margin-bottom:20px}.not-available{color:#9a533c}.not-available .status-dot{background:#9a533c}
+.page-price{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.page-price strong{font-size:27px;font-weight:500;letter-spacing:-.8px}
+.page-price del{font-size:12px;color:var(--muted)}.discount-pill{font-size:9px;border-radius:4px;background:#f4e2d4;color:var(--accent);padding:5px 7px}
+.price-condition{font-size:10px;line-height:1.8;color:var(--muted);margin:10px 0 19px}
+.product-highlights{display:grid;grid-template-columns:1fr 1fr;gap:15px 12px;border-top:1px solid var(--line);padding:18px 0;margin-bottom:7px}
+.product-highlights span{display:block;font-size:9px;color:var(--muted);margin-bottom:5px}.product-highlights strong{font-size:12px;font-weight:500}
+.product-page-heading .primary-button{width:100%;margin-top:9px;padding:14px 10px}.page-ask-note{font-size:9px;line-height:1.8;color:var(--muted)}
+.product-section-links{position:sticky;top:0;background:var(--paper);z-index:2;display:flex;gap:24px;overflow-x:auto;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:18px 0;margin:32px 0}
+.product-section-links a{text-decoration:none;font-size:11px;white-space:nowrap}
+.product-page-section{padding:10px 0 29px;scroll-margin-top:70px;border-bottom:1px solid var(--line);margin-bottom:26px}
+.product-page-section .eyebrow{font-size:8px;color:var(--muted)}
+.product-page-section h2{font-family:var(--serif);font-weight:400;font-size:31px;letter-spacing:-.6px;margin:13px 0 19px}
+.product-page-section>p{font-size:13px;line-height:1.9;max-width:720px}
+.product-page-section .source-caption{font-size:9px;color:var(--muted);margin-top:12px}
+.section-title-row{display:flex;align-items:center;justify-content:space-between;gap:15px}.section-title-row .text-button{font-size:10px}
+.full-specs{display:grid;grid-template-columns:1fr 1fr;gap:0 24px;margin:0}
+.full-specs>div{display:flex;justify-content:space-between;gap:16px;padding:13px 0;border-bottom:1px solid var(--line);font-size:12px}
+.full-specs dt{color:var(--muted)}.full-specs dd{margin:0;text-align:right;overflow-wrap:anywhere}
+.confirm-details{background:#ede9df;border-radius:5px;padding:16px 19px;margin:20px 0}.confirm-details h3{font-size:12px;font-weight:500;margin:0 0 7px}.confirm-details p{font-size:11px;line-height:1.8;color:var(--muted);margin:0}
+.product-question-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:23px}
+.product-question-grid button{background:var(--white);border:1px solid var(--line);border-radius:5px;padding:14px;text-align:left;display:flex;justify-content:space-between;font-size:12px}
+.product-question-grid button:hover{border-color:var(--accent)}.product-question-grid button>span:last-child{color:var(--accent)}
+.own-question{margin-top:15px;width:100%;padding:14px}.product-policy-grid{display:grid;gap:16px}
+.product-policy-grid article{background:var(--white);border:1px solid var(--line);border-radius:5px;padding:17px 19px}
+.product-policy-grid h3{font-family:var(--serif);font-size:20px;font-weight:400;margin:0 0 10px}
+.product-policy-grid p{font-size:11px;line-height:1.9;margin:0 0 12px;color:var(--muted)}.product-page-footnote{font-size:9px;line-height:1.8;color:var(--muted)}
+.product-chat-topics{background:#f3f1e8;padding:15px 19px;border-bottom:1px solid var(--line);max-height:255px;overflow:auto;flex-shrink:0}
+.product-chat-topics h3{font-family:var(--serif);font-size:18px;font-weight:400;margin:0 0 6px}
+.product-chat-topics>p{font-size:9px;line-height:1.6;color:var(--muted);margin:0 0 11px}
+.chat-topic-buttons{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.chat-topic-buttons button{font-size:9px;padding:7px 9px;border:1px solid #d1d5c8;background:var(--white);border-radius:4px}
+.chat-topic-buttons button:hover{border-color:var(--accent)}.product-chat-topics>.text-button{font-size:10px}
+.route-loading{font-family:var(--serif);font-size:24px;padding:50px 0}
+@media(max-width:1200px){.product-page-hero{grid-template-columns:1fr;gap:22px}.product-page-art{min-height:285px}.product-page-art svg{height:260px}.product-highlights{grid-template-columns:repeat(2,1fr)}.product-page-heading h1{font-size:36px}.full-specs{grid-template-columns:1fr}.product-section-links{gap:18px}.product-question-grid{grid-template-columns:1fr}}
+@media(max-width:720px){.product-page-hero{gap:24px}.product-page-art{min-height:330px}.product-page-art svg{height:300px}.product-page-heading h1{font-size:38px}.product-page-section h2{font-size:30px}.product-question-grid{grid-template-columns:1fr 1fr}.product-chat-topics{max-height:240px}.product-breadcrumb{font-size:9px}.product-section-links{gap:20px}}
+@media(max-width:400px){.product-question-grid{grid-template-columns:1fr}.section-title-row{align-items:start;flex-direction:column;gap:0}}

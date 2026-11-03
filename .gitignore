@@ -21,3 +21,4 @@ test-results/
 *.egg-info/
 build/
 dist/
+!docs/quality-notes.md

@@ -1,5 +1,6 @@
 """Optional local browser acceptance checks using an installed Chromium browser."""
 from pathlib import Path
+import os
 from playwright.sync_api import sync_playwright, expect
 
 ROOT=Path(__file__).resolve().parents[1]
@@ -15,7 +16,7 @@ def main():
         browser=playwright.chromium.launch(headless=True,**({"executable_path":executable} if executable else {}))
         page=browser.new_page(viewport={"width":1600,"height":1050},device_scale_factor=1)
         page.on("pageerror",lambda error:errors.append(str(error)))
-        page.goto("http://127.0.0.1:8765",wait_until="networkidle")
+        page.goto(os.environ.get("EMPORIO_TEST_URL","http://127.0.0.1:8765"),wait_until="networkidle")
         expect(page.locator(".product-card")).to_have_count(65)
         expect(page.locator("#result-count")).to_have_text("65 instruments")
         output=ROOT/".runtime"
@@ -31,7 +32,12 @@ def main():
         page.locator(".product-art").first.click()
         expect(page.locator("#product-dialog")).to_be_visible()
         page.locator("#ask-product").click()
-        expect(page.locator("#messages")).to_contain_text("The quoted price")
+        expect(page.locator("#chat-input")).to_have_value("")
+        expect(page.locator("#product-questions")).to_be_visible()
+        page.locator('#product-questions [data-topic="0"]').click()
+        expect(page.locator("#chat-input")).to_have_value("What are the materials and technical specifications of this instrument?")
+        page.locator("#send-button").click()
+        expect(page.locator("#messages")).to_contain_text("recorded specifications")
         expect(page.locator("#messages")).to_contain_text("get_product")
         page.locator("#open-settings").click()
         expect(page.locator("#settings-dialog")).to_be_visible()

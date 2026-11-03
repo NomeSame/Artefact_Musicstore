@@ -1,5 +1,28 @@
 import {$,state,api,esc,money,context,announceContext,toast} from "./api.js";
 import {selectProduct,renderCategories,loadProducts} from "./catalogue.js";
+import {productQuestions} from "./product-page.js";
+
+function renderProductQuestions(product) {
+ const area=$("#product-questions");
+ area.innerHTML='<h3>What would you like to know?</h3><p>Choose a starting point, then edit or send your question.</p><div class="chat-topic-buttons">'+
+  productQuestions(product).map((q,i)=>'<button type="button" data-topic="'+i+'">'+esc(q.label)+'</button>').join("")+
+  '</div><button type="button" class="text-button" id="chat-own-question">Write my own question ↗</button>';
+ area.querySelectorAll("[data-topic]").forEach(button=>button.addEventListener("click",()=>{
+  $("#chat-input").value=productQuestions(product)[Number(button.dataset.topic)].prompt;
+  $("#chat-input").focus({preventScroll:true});
+ }));
+ $("#chat-own-question").addEventListener("click",()=>{
+  $("#chat-input").value="";$("#chat-input").focus({preventScroll:true});
+ });
+}
+function prepareProductChat({product,prompt=""}) {
+ state.selected=product;state.category=product.category_id;announceContext();
+ renderProductQuestions(product);$("#product-questions").hidden=false;
+ $("#suggestions").hidden=true;$("#chat-input").value=prompt;
+ document.querySelector(".assistant-panel").scrollIntoView({behavior:"smooth",block:"start"});
+ $("#chat-input").focus({preventScroll:true});
+}
+
 function addMessage(role,text) {
  const node=document.createElement("div");node.className="message "+(role==="user"?"user-message":"assistant-message");
  const meta=document.createElement("div");meta.className="message-meta";meta.textContent=role==="user"?"YOU":"EMPÓRIO GUIDE";
@@ -26,7 +49,7 @@ export async function sendMessage(text) {
    if(result.trace.length) {
     const details=document.createElement("details");details.className="tool-trace";
     const summary=document.createElement("summary");summary.textContent="Consulted "+result.trace.map(t=>t.name).join(", ");
-    const pre=document.createElement("pre");pre.textContent=JSON.stringify(result.trace.map(t=>({tool:t.name,arguments:t.arguments,error:t.result.error??null})),null,2);
+    const pre=document.createElement("pre");pre.textContent=JSON.stringify(result.trace.map(t=>({tool:t.name,arguments:t.arguments,cached:Boolean(t.cached),error:t.result.error??null})),null,2);
     details.append(summary,pre);node.append(details);
    }
    for(const action of result.actions) {
@@ -44,7 +67,7 @@ export function wireChat() {
  $("#chat-form").addEventListener("submit",event=>{event.preventDefault();sendMessage($("#chat-input").value);});
  $("#chat-input").addEventListener("keydown",event=>{if(event.key==="Enter"&&!event.shiftKey){event.preventDefault();sendMessage($("#chat-input").value);}});
  document.querySelectorAll("[data-prompt]").forEach(b=>b.addEventListener("click",()=>sendMessage(b.dataset.prompt)));
- document.addEventListener("ask-product",event=>sendMessage(event.detail));
+ document.addEventListener("prepare-product-chat",event=>prepareProductChat(event.detail));
  $("#chat-menu").addEventListener("click",()=>{const open=$("#chat-actions").hidden;$("#chat-actions").hidden=!open;$("#chat-menu").setAttribute("aria-expanded",String(open));});
  $("#reset-chat").addEventListener("click",async()=>{
   if(state.busy)return;
@@ -57,5 +80,7 @@ export function wireChat() {
   const category=state.categories.find(c=>c.category_id===state.category)?.label??"All instruments";
   $("#context-label").textContent=category;$("#selected-context").hidden=!state.selected;
   $("#selected-name").textContent=state.selected?.name??"";
+  if(!state.selected)$("#product-questions").hidden=true;
+  else if(!$("#product-questions").hidden)renderProductQuestions(state.selected);
  });
 }

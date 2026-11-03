@@ -1,6 +1,7 @@
 import {$,state,api,esc,money,showDialog,toast} from "./api.js";
 import {renderCategories,loadProducts,wireCatalogue} from "./catalogue.js";
 import {wireChat} from "./chat.js";
+import {wireProductPages,renderProductRoute} from "./product-page.js";
 
 function updateMode(config) {
  state.config=config;
@@ -54,7 +55,9 @@ $("#open-tools").addEventListener("click",async()=>{
  '<section class="tool-doc"><h3>'+esc(t.name)+'</h3><p>'+esc(t.description)+'</p><p>'+esc(t.access)+' '+esc(t.side_effects)+'</p><details><summary>Input schema</summary><pre>'+esc(JSON.stringify(t.input_schema,null,2))+'</pre></details><details><summary>Result schema</summary><pre>'+esc(JSON.stringify(t.output_schema,null,2))+'</pre></details></section>').join("");showDialog("#tools-dialog");}
  catch(error){toast(error.message);}
 });
-wireCatalogue();wireChat();
+wireCatalogue();wireChat();wireProductPages();
+document.addEventListener("category-state-changed",renderCategories);
+document.addEventListener("collection-requested",()=>{renderCategories();loadProducts();});
 try{const boot=await api("/api/bootstrap");state.categories=boot.categories;$("#total-count").textContent=boot.product_count;
- updateMode(boot.config);renderCategories();await loadProducts();}
+ updateMode(boot.config);renderCategories();await loadProducts();await renderProductRoute();}
 catch(error){toast(error.message);$("#result-count").textContent="Server unavailable";}
