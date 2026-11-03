@@ -1,0 +1,969 @@
+{
+ "100": {
+  "file": "100.jpg",
+  "label": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "label_de": "KI-generierte Illustration. Kann vom tatsächlichen Produkt abweichen.",
+  "label_en": "AI-generated illustration. It may differ from the actual product.",
+  "label_pt": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "product": "Takamine GC5CE Elétrico Nylon Natural",
+  "source_candidate": "out/100_r1.png",
+  "source_sha256": "40d886f61e3c2824f4bcb2fd26912491ca71a3272f3dab7ae5c2c012aed98f9c",
+  "tolerated_differences": [
+   "simplified rosette detail",
+   "slightly different headstock logo/lettering",
+   "minor differences in string and bridge rendering",
+   "slightly different wood shading and cutaway contour"
+  ]
+ },
+ "101": {
+  "file": "101.jpg",
+  "label": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "label_de": "KI-generierte Illustration. Kann vom tatsächlichen Produkt abweichen.",
+  "label_en": "AI-generated illustration. It may differ from the actual product.",
+  "label_pt": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "product": "Giannini GNF-3 CEQ Elétrico Nylon Natural",
+  "source_candidate": "out/101_r1.png",
+  "source_sha256": "3b44647fdad6926ce7f4bce40f6e04874538684a6823d971b748b1de65790684",
+  "tolerated_differences": [
+   "darker reddish-brown body shading vs. pale natural top",
+   "simplified bridge and rosette detailing",
+   "electronics/preamp controls not clearly depicted",
+   "simplified soundhole label lettering"
+  ]
+ },
+ "102": {
+  "file": "102.jpg",
+  "label": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "label_de": "KI-generierte Illustration. Kann vom tatsächlichen Produkt abweichen.",
+  "label_en": "AI-generated illustration. It may differ from the actual product.",
+  "label_pt": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "product": "Crafter CE-15 Elétrico Nylon Natural",
+  "source_candidate": "out/102_r2_1.png",
+  "source_sha256": "3aaf8d3df59e0ab46b16f240826401b25f866b475bcda58334f4cae6ab04a76d",
+  "tolerated_differences": [
+   "stylized illustration rather than photograph",
+   "simplified hardware and case details",
+   "slightly different colour shading",
+   "simplified lettering and hardware"
+  ]
+ },
+ "103": {
+  "file": "103.jpg",
+  "label": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "label_de": "KI-generierte Illustration. Kann vom tatsächlichen Produkt abweichen.",
+  "label_en": "AI-generated illustration. It may differ from the actual product.",
+  "label_pt": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "product": "Tagima Vegas Elétrico Aço Natural",
+  "source_candidate": "out/103.png",
+  "source_sha256": "68e2238080b22a2cb1dfe1bee42dbf7bf797b61f1bb2fcfd30a3ab2ae26bf881",
+  "tolerated_differences": [
+   "different headstock lettering/logo",
+   "slightly different black shading and rosette detail",
+   "simplified electronics/hardware visibility"
+  ]
+ },
+ "104": {
+  "file": "104.jpg",
+  "label": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "label_de": "KI-generierte Illustration. Kann vom tatsächlichen Produkt abweichen.",
+  "label_en": "AI-generated illustration. It may differ from the actual product.",
+  "label_pt": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "product": "Yamaha APX600 Elétrico Aço Preto",
+  "source_candidate": "out/104.png",
+  "source_sha256": "581c22755b0444f1cef104b2e39e1c6045d34b31b753a5c99592e866d46315d2",
+  "tolerated_differences": [
+   "pickguard visible in candidate but not clearly visible in reference",
+   "simplified bridge and electronics details",
+   "slightly distorted headstock lettering",
+   "minor shading and reflection differences"
+  ]
+ },
+ "105": {
+  "file": "105.jpg",
+  "label": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "label_de": "KI-generierte Illustration. Kann vom tatsächlichen Produkt abweichen.",
+  "label_en": "AI-generated illustration. It may differ from the actual product.",
+  "label_pt": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "product": "Takamine GN51CE Elétrico Aço Natural",
+  "source_candidate": "out/105_r2_1.png",
+  "source_sha256": "bb2940794ed90b853a4a9e52d26401ed8e1fc436210082d6d5b29738942999fb",
+  "tolerated_differences": [
+   "diagonal/rotated presentation compared with the horizontal reference",
+   "simplified headstock lettering and tuning-machine details",
+   "slightly different pickguard, bridge, and rosette rendering",
+   "minor color and shading variation"
+  ]
+ },
+ "106": {
+  "file": "106.jpg",
+  "label": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "label_de": "KI-generierte Illustration. Kann vom tatsächlichen Produkt abweichen.",
+  "label_en": "AI-generated illustration. It may differ from the actual product.",
+  "label_pt": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "product": "Taylor 214ce Elétrico Aço Natural",
+  "source_candidate": "out/106_r2_1.png",
+  "source_sha256": "1bafdaf141f14f70988a2a075071b264f36b90fc87d4de50303fd66f58c2f059",
+  "tolerated_differences": [
+   "simplified headstock lettering/logo",
+   "slightly different body proportions and cutaway shape",
+   "simplified rosette, pickguard, and bridge details",
+   "electronics controls not visibly depicted"
+  ]
+ },
+ "107": {
+  "file": "107.jpg",
+  "label": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "label_de": "KI-generierte Illustration. Kann vom tatsächlichen Produkt abweichen.",
+  "label_en": "AI-generated illustration. It may differ from the actual product.",
+  "label_pt": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "product": "Shelby SGD-195E Elétrico Aço Sunburst",
+  "source_candidate": "out/107.png",
+  "source_sha256": "a831653b00834ec4170c517a778a4e42f84dffb1852e1af33bfac4acf7d1ae4c",
+  "tolerated_differences": [
+   "slightly different wood/color shading and finish (browner, less sunburst)",
+   "simplified or distorted headstock lettering",
+   "simplified tuning-machine and bridge hardware details",
+   "minor string and fret rendering simplifications"
+  ]
+ },
+ "108": {
+  "file": "108.jpg",
+  "label": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "label_de": "KI-generierte Illustration. Kann vom tatsächlichen Produkt abweichen.",
+  "label_en": "AI-generated illustration. It may differ from the actual product.",
+  "label_pt": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "product": "Martin D-28E Elétrico Aço Natural",
+  "source_candidate": "out/108_r2_1.png",
+  "source_sha256": "1153594b6ee4da7879c3843f7d21fcc5a9ed37732521116e830e8e7534a4dd0d",
+  "tolerated_differences": [
+   "missing visible on-board electronics/knobs",
+   "different headstock logo and simplified lettering",
+   "different bridge and pickguard details",
+   "slight body proportion and color shading differences"
+  ]
+ },
+ "109": {
+  "file": "109.jpg",
+  "label": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "label_de": "KI-generierte Illustration. Kann vom tatsächlichen Produkt abweichen.",
+  "label_en": "AI-generated illustration. It may differ from the actual product.",
+  "label_pt": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "product": "Rozini RV-174 7 Cordas Nylon Natural",
+  "source_candidate": "out/109_r2_1.png",
+  "source_sha256": "7660bce59a470c3090837bf8e67d10bb352b7d699784fd2eab8fa0031f0517fd",
+  "tolerated_differences": [
+   "viewing angle differs (reference is straight-on, candidate is three-quarter)",
+   "string count appears to be 6 instead of the specified 7",
+   "wood grain and color shading vary slightly"
+  ]
+ },
+ "110": {
+  "file": "110.jpg",
+  "label": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "label_de": "KI-generierte Illustration. Kann vom tatsächlichen Produkt abweichen.",
+  "label_en": "AI-generated illustration. It may differ from the actual product.",
+  "label_pt": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "product": "Giannini GWNE-7 7 Cordas Nylon Natural",
+  "source_candidate": "out/110_r2_2.png",
+  "source_sha256": "f386e2bc4366d6e26088415441ef9b793240a021e9ed6cc199def23c6f1ef088",
+  "tolerated_differences": [
+   "string count differs from the 7-string reference",
+   "simplified rosette and bridge hardware",
+   "slightly different wood shading",
+   "no visible brand label or headstock logo"
+  ]
+ },
+ "111": {
+  "file": "111.jpg",
+  "label": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "label_de": "KI-generierte Illustration. Kann vom tatsächlichen Produkt abweichen.",
+  "label_en": "AI-generated illustration. It may differ from the actual product.",
+  "label_pt": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "product": "Rozini RV-175 7 Cordas Elétrico Natural",
+  "source_candidate": "out/111_r2_1.png",
+  "source_sha256": "ecd9544528184b199165cb37b6078088f41499a807c92461271205cafdad4c20",
+  "tolerated_differences": [
+   "visible string count differs from the specified 7-string configuration",
+   "tuning-machine and headstock lettering simplified",
+   "minor colour/shading differences",
+   "minor rendering artifacts along the body side/back"
+  ]
+ },
+ "112": {
+  "file": "112.jpg",
+  "label": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "label_de": "KI-generierte Illustration. Kann vom tatsächlichen Produkt abweichen.",
+  "label_en": "AI-generated illustration. It may differ from the actual product.",
+  "label_pt": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "product": "Tagima TW-7 7 Cordas Aço Natural",
+  "source_candidate": "out/112_r2_1.png",
+  "source_sha256": "dcddf9ad6f35dbf4929cc10dd5ae87359b8b278d98f4e8df4c8f966f08ab0fd9",
+  "tolerated_differences": [
+   "different headstock shape and logo lettering",
+   "different pickup cover color and hardware details",
+   "different fretboard inlay design",
+   "slightly different body contour and wood shading"
+  ]
+ },
+ "113": {
+  "file": "113.jpg",
+  "label": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "label_de": "KI-generierte Illustration. Kann vom tatsächlichen Produkt abweichen.",
+  "label_en": "AI-generated illustration. It may differ from the actual product.",
+  "label_pt": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "product": "Shelby SN-7C 7 Cordas Nylon Natural",
+  "source_candidate": "out/113_r2_2.png",
+  "source_sha256": "ec2881b8c42a347346e918ac6f72b27a84fac331881260968f3b709f318b724c",
+  "tolerated_differences": [
+   "different string count (6 instead of 7)",
+   "different headstock tuning machine layout",
+   "simplified rosette lettering",
+   "slightly different body proportions and shading"
+  ]
+ },
+ "114": {
+  "file": "114.jpg",
+  "label": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "label_de": "KI-generierte Illustration. Kann vom tatsächlichen Produkt abweichen.",
+  "label_en": "AI-generated illustration. It may differ from the actual product.",
+  "label_pt": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "product": "Yamaha CG162S Nylon Natural",
+  "source_candidate": "out/114_r1.png",
+  "source_sha256": "159241a2a552c19328181f1636d73f356211091f1f73da35515a7ae0e464f361",
+  "tolerated_differences": [
+   "simplified tuning-machine details",
+   "slightly different rosette pattern",
+   "minor color and shading differences",
+   "simplified headstock lettering"
+  ]
+ },
+ "115": {
+  "file": "115.jpg",
+  "label": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "label_de": "KI-generierte Illustration. Kann vom tatsächlichen Produkt abweichen.",
+  "label_en": "AI-generated illustration. It may differ from the actual product.",
+  "label_pt": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "product": "Takamine GC1CE Elétrico Nylon Natural",
+  "source_candidate": "out/115.png",
+  "source_sha256": "4599cdaa309d80dcd6da15132afe71b85d43fc8a1557f051ba2eb86276c343f3",
+  "tolerated_differences": [
+   "simplified or absent preamp controls",
+   "headstock logo/lettering not visible",
+   "slightly different natural finish shading",
+   "simplified tuning-machine hardware"
+  ]
+ },
+ "116": {
+  "file": "116.jpg",
+  "label": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "label_de": "KI-generierte Illustration. Kann vom tatsächlichen Produkt abweichen.",
+  "label_en": "AI-generated illustration. It may differ from the actual product.",
+  "label_pt": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "product": "Kala KA-15S Soprano Mogno",
+  "source_candidate": "out/116.png",
+  "source_sha256": "1a991f99f1c14969f7135bdb67b6c0bcb92e8de2ae793da17d5b1bdc8bdab68b",
+  "tolerated_differences": [
+   "slightly different wood colour shading and lighting",
+   "simplified tuning-machine and bridge hardware",
+   "minor differences in body and headstock outline",
+   "slightly simplified Kala lettering"
+  ]
+ },
+ "117": {
+  "file": "117.jpg",
+  "label": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "label_de": "KI-generierte Illustration. Kann vom tatsächlichen Produkt abweichen.",
+  "label_en": "AI-generated illustration. It may differ from the actual product.",
+  "label_pt": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "product": "Ohana SK-10 Soprano Natural",
+  "source_candidate": "out/117_r2_1.png",
+  "source_sha256": "b98f46eaf29833c1d1a5f0f56baf2c400aab0149e268295a5f8500ee7e6bc711",
+  "tolerated_differences": [
+   "solid headstock instead of slotted",
+   "different tuning peg style",
+   "simplified bridge design",
+   "different soundhole rosette"
+  ]
+ },
+ "118": {
+  "file": "118.jpg",
+  "label": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "label_de": "KI-generierte Illustration. Kann vom tatsächlichen Produkt abweichen.",
+  "label_en": "AI-generated illustration. It may differ from the actual product.",
+  "label_pt": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "product": "Kalani KAL-300S Soprano Natural",
+  "source_candidate": "out/118.png",
+  "source_sha256": "6bfe5b6306d4836ee1b9dc9ac43a86e7453bf220c1bb95c4c1e44336f51fe79d",
+  "tolerated_differences": [
+   "three-quarter view instead of front view",
+   "simplified tuning-machine and bridge hardware",
+   "slightly different wood color and shading",
+   "minor differences in body/neck joint rendering"
+  ]
+ },
+ "119": {
+  "file": "119.jpg",
+  "label": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "label_de": "KI-generierte Illustration. Kann vom tatsächlichen Produkt abweichen.",
+  "label_en": "AI-generated illustration. It may differ from the actual product.",
+  "label_pt": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "product": "Shelby SU-21S Soprano Sunburst",
+  "source_candidate": "out/119_r1.png",
+  "source_sha256": "dd0e6d6be046d8bf783888fb489e6923136056219859df5a3cec67685fba2375",
+  "tolerated_differences": [
+   "different headstock outline and simplified tuning-machine layout",
+   "simplified rosette and lettering/logo",
+   "slightly different sunburst shading and body proportions",
+   "simplified bridge and fretboard inlays"
+  ]
+ },
+ "120": {
+  "file": "120.jpg",
+  "label": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "label_de": "KI-generierte Illustration. Kann vom tatsächlichen Produkt abweichen.",
+  "label_en": "AI-generated illustration. It may differ from the actual product.",
+  "label_pt": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "product": "Kala KA-C Concert Mogno",
+  "source_candidate": "out/120.png",
+  "source_sha256": "5c9ea24e4ae4a0850ea00fb2db095ea93673c3b6a913f846327cfc9ff358874c",
+  "tolerated_differences": [
+   "simplified Kala headstock lettering",
+   "slightly different body proportions",
+   "simplified bridge and rosette details",
+   "simplified tuning-machine hardware"
+  ]
+ },
+ "121": {
+  "file": "121.jpg",
+  "label": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "label_de": "KI-generierte Illustration. Kann vom tatsächlichen Produkt abweichen.",
+  "label_en": "AI-generated illustration. It may differ from the actual product.",
+  "label_pt": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "product": "Ohana CK-20 Concert Natural",
+  "source_candidate": "out/121.png",
+  "source_sha256": "fe58298c38c9d14a0d2c097f6a1449ad1bf6ecaa93b46fe193fbb7d998bc9405",
+  "tolerated_differences": [
+   "simplified soundhole label and lettering",
+   "slightly different wood grain and color shading",
+   "simplified tuning hardware",
+   "minor body outline and neck-joint distortion"
+  ]
+ },
+ "122": {
+  "file": "122.jpg",
+  "label": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "label_de": "KI-generierte Illustration. Kann vom tatsächlichen Produkt abweichen.",
+  "label_en": "AI-generated illustration. It may differ from the actual product.",
+  "label_pt": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "product": "Kalani KAL-500C Concert Elétrico Natural",
+  "source_candidate": "out/122.png",
+  "source_sha256": "e8e119cbb2630c42f9336d38e5bbd3cb28dfcee942080189740a238ceaa6e0ee",
+  "tolerated_differences": [
+   "wood grain and shading differ",
+   "body proportions slightly differ",
+   "white binding not visible",
+   "hardware simplified"
+  ]
+ },
+ "123": {
+  "file": "123.jpg",
+  "label": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "label_de": "KI-generierte Illustration. Kann vom tatsächlichen Produkt abweichen.",
+  "label_en": "AI-generated illustration. It may differ from the actual product.",
+  "label_pt": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "product": "Kala KA-SMHCE Concert Elétrico Mogno",
+  "source_candidate": "out/123_r2_2.png",
+  "source_sha256": "fd806cb2dfc954f97105587183d4fb5a62d7d5e126f0bafcfad7754fc402d627",
+  "tolerated_differences": [
+   "missing cutaway",
+   "simplified bridge and rosette details",
+   "slightly different body proportions and headstock shape",
+   "simplified logo lettering"
+  ]
+ },
+ "124": {
+  "file": "124.jpg",
+  "label": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "label_de": "KI-generierte Illustration. Kann vom tatsächlichen Produkt abweichen.",
+  "label_en": "AI-generated illustration. It may differ from the actual product.",
+  "label_pt": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "product": "Kala KA-T Tenor Mogno",
+  "source_candidate": "out/124.png",
+  "source_sha256": "60d1e97702e62b74b7f55cc08b6ef0cea5558b92ce3703ab762edc096bea293c",
+  "tolerated_differences": [
+   "headstock lettering reads KAILA instead of KALA",
+   "slightly different wood grain pattern",
+   "simplified bridge and string attachment"
+  ]
+ },
+ "125": {
+  "file": "125.jpg",
+  "label": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "label_de": "KI-generierte Illustration. Kann vom tatsächlichen Produkt abweichen.",
+  "label_en": "AI-generated illustration. It may differ from the actual product.",
+  "label_pt": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "product": "Ohana TK-35G Tenor Sólido Natural",
+  "source_candidate": "out/125_r2_1.png",
+  "source_sha256": "199146d2151e08f635ef714922500145b7747f7be083d7371eba79629968b376",
+  "tolerated_differences": [
+   "simplified tuning-machine hardware",
+   "slightly different wood grain and shading",
+   "simplified bridge and rosette details",
+   "plain background instead of reference background"
+  ]
+ },
+ "126": {
+  "file": "126.jpg",
+  "label": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "label_de": "KI-generierte Illustration. Kann vom tatsächlichen Produkt abweichen.",
+  "label_en": "AI-generated illustration. It may differ from the actual product.",
+  "label_pt": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "product": "Kala KA-SRT-CTG Tenor Elétrico Cedar",
+  "source_candidate": "out/126_r2_2.png",
+  "source_sha256": "7cff2f13961635a790cc5c3296e530d530740bf375f8b92bd98ff36ea675f07c",
+  "tolerated_differences": [
+   "missing cutaway",
+   "simplified bridge and tuning hardware",
+   "no visible electronics controls",
+   "slightly different wood shading and rosette detail"
+  ]
+ },
+ "127": {
+  "file": "127.jpg",
+  "label": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "label_de": "KI-generierte Illustration. Kann vom tatsächlichen Produkt abweichen.",
+  "label_en": "AI-generated illustration. It may differ from the actual product.",
+  "label_pt": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "product": "Kalani KAL-700T Tenor Natural",
+  "source_candidate": "repair7/127_a1.png",
+  "source_sha256": "4136119e67e0ade2c8013dbd2ccdaf468973af6a8b308d9afa56f92c2d49102d",
+  "tolerated_differences": [
+   "different headstock logo/lettering",
+   "slightly different wood grain and color shading",
+   "simplified bridge and tuning hardware"
+  ]
+ },
+ "128": {
+  "file": "128.jpg",
+  "label": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "label_de": "KI-generierte Illustration. Kann vom tatsächlichen Produkt abweichen.",
+  "label_en": "AI-generated illustration. It may differ from the actual product.",
+  "label_pt": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "product": "Kala KA-B Barítono Mogno",
+  "source_candidate": "out/128.png",
+  "source_sha256": "3ed4d239bf7614d612b9b6f02a931ef45282b950c0f2ddb0e4c55967edd0331c",
+  "tolerated_differences": [
+   "slightly different body outline and bridge design",
+   "simplified tuning hardware and logo lettering",
+   "minor wood-grain and colour shading differences",
+   "slight perspective distortion"
+  ]
+ },
+ "129": {
+  "file": "129.jpg",
+  "label": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "label_de": "KI-generierte Illustration. Kann vom tatsächlichen Produkt abweichen.",
+  "label_en": "AI-generated illustration. It may differ from the actual product.",
+  "label_pt": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "product": "Ohana BK-35E Barítono Elétrico Natural",
+  "source_candidate": "out/129_r1.png",
+  "source_sha256": "8c3d901f320a29bbb691fe2d13c6122f2a4436d966e18eddc6e971316cd2290c",
+  "tolerated_differences": [
+   "simplified headstock and tuning-machine shapes",
+   "simplified bridge and rosette details",
+   "slightly different body proportions and scale appearance",
+   "no visible electronics/preamp controls"
+  ]
+ },
+ "130": {
+  "file": "130.jpg",
+  "label": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "label_de": "KI-generierte Illustration. Kann vom tatsächlichen Produkt abweichen.",
+  "label_en": "AI-generated illustration. It may differ from the actual product.",
+  "label_pt": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "product": "Kala KA-ABP-CTG Barítono Cedar",
+  "source_candidate": "out/130_r2_1.png",
+  "source_sha256": "e4ab49e32d52e74e5e6c395872fd67a1dfc21a7a0a54a62734726eec352baf98",
+  "tolerated_differences": [
+   "front view instead of three-quarter view",
+   "simplified rosette and bridge details",
+   "slightly different wood shading and grain appearance",
+   "simplified headstock lettering"
+  ]
+ },
+ "131": {
+  "file": "131.jpg",
+  "label": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "label_de": "KI-generierte Illustration. Kann vom tatsächlichen Produkt abweichen.",
+  "label_en": "AI-generated illustration. It may differ from the actual product.",
+  "label_pt": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "product": "Gibson Les Paul Standard '50s",
+  "source_candidate": "out/131_r2_1.png",
+  "source_sha256": "62869bac4e34bd1f53439df5d80349c38b1d9123e2565193505393f4c22d287a",
+  "tolerated_differences": [
+   "simplified hardware and bridge details",
+   "slightly different colour shading",
+   "simplified or distorted headstock lettering/logo",
+   "minor differences in knob and pickup rendering"
+  ]
+ },
+ "132": {
+  "file": "132.jpg",
+  "label": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "label_de": "KI-generierte Illustration. Kann vom tatsächlichen Produkt abweichen.",
+  "label_en": "AI-generated illustration. It may differ from the actual product.",
+  "label_pt": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "product": "Ibanez RG550 Genesis Collection",
+  "source_candidate": "out/132_r2_1.png",
+  "source_sha256": "f466f073d65df729710035ba2a776ada95020753f48de5af35abcf41625e6646",
+  "tolerated_differences": [
+   "different tuner finish (black vs chrome)",
+   "simplified bridge and back-plate hardware",
+   "neck-plate lettering simplified/illegible",
+   "slightly different red body shading and gloss"
+  ]
+ },
+ "133": {
+  "file": "133.jpg",
+  "label": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "label_de": "KI-generierte Illustration. Kann vom tatsächlichen Produkt abweichen.",
+  "label_en": "AI-generated illustration. It may differ from the actual product.",
+  "label_pt": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "product": "PRS SE Custom 24",
+  "source_candidate": "repair7/133_a1.png",
+  "source_sha256": "cf7c6b2a6129575d9116aa0c1dc37f5ffcfcd78f078d429a166fd45ced75162d",
+  "tolerated_differences": [
+   "slightly different green/teal colour shading",
+   "simplified hardware and lettering",
+   "minor contour and finish variation"
+  ]
+ },
+ "134": {
+  "file": "134.jpg",
+  "label": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "label_de": "KI-generierte Illustration. Kann vom tatsächlichen Produkt abweichen.",
+  "label_en": "AI-generated illustration. It may differ from the actual product.",
+  "label_pt": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "product": "Fender Telecaster Player Series",
+  "source_candidate": "out/134_r1.png",
+  "source_sha256": "dc41cb35ef8cfddeafdcc5b99363a449d0f4990aa9f1cdc764d9306542175cdc",
+  "tolerated_differences": [
+   "simplified bridge and control hardware",
+   "slightly garbled headstock lettering",
+   "minor differences in string and tuning-machine rendering",
+   "slight colour and shading variation"
+  ]
+ },
+ "136": {
+  "file": "136.jpg",
+  "label": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "label_de": "KI-generierte Illustration. Kann vom tatsächlichen Produkt abweichen.",
+  "label_en": "AI-generated illustration. It may differ from the actual product.",
+  "label_pt": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "product": "Ibanez Bass 2X Electric Bass",
+  "source_candidate": "repair7/136_a1.png",
+  "source_sha256": "8e7c3cc677e2d613e5aab699fb640fd2b649b42844cf0fcbf8931fdf8198372f",
+  "tolerated_differences": [
+   "different headstock shape and logo/lettering",
+   "tuning-machine arrangement/count differs",
+   "simplified hardware and control knobs"
+  ]
+ },
+ "138": {
+  "file": "138.jpg",
+  "label": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "label_de": "KI-generierte Illustration. Kann vom tatsächlichen Produkt abweichen.",
+  "label_en": "AI-generated illustration. It may differ from the actual product.",
+  "label_pt": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "product": "Music Man Bass 4X Electric Bass",
+  "source_candidate": "out/138_r2_1.png",
+  "source_sha256": "fbf3157bb932637a0efb2b5d44008cb9e1fc3eedd7bc3c49be0780c48e9069fe",
+  "tolerated_differences": [
+   "simplified pickup and control-plate hardware",
+   "slightly different headstock lettering and tuning-machine detailing",
+   "minor body-outline and pickguard shape differences",
+   "slightly different shading and hardware finish"
+  ]
+ },
+ "141": {
+  "file": "141.jpg",
+  "label": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "label_de": "KI-generierte Illustration. Kann vom tatsächlichen Produkt abweichen.",
+  "label_en": "AI-generated illustration. It may differ from the actual product.",
+  "label_pt": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "product": "Bateria Acústica Yamaha Kit 3 Studio",
+  "source_candidate": "out/141_r1.png",
+  "source_sha256": "43e95ff11f5af38aafa42d1b35a4e6dfa5e91588ddd351b4c87ba703d3b94850",
+  "tolerated_differences": [
+   "different cymbal and microphone placement",
+   "simplified hardware and stand details",
+   "slightly different shell finish and drum sizes",
+   "logo and lettering rendering differences"
+  ]
+ },
+ "142": {
+  "file": "142.jpg",
+  "label": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "label_de": "KI-generierte Illustration. Kann vom tatsächlichen Produkt abweichen.",
+  "label_en": "AI-generated illustration. It may differ from the actual product.",
+  "label_pt": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "product": "Teclado Sintetizador Korg Synth 1 Pro",
+  "source_candidate": "out/142_r2_1.png",
+  "source_sha256": "d73b5634c526a4496579e244ccdca4a6d4a8e7b54d8faed1c5e6bc6891998f4d",
+  "tolerated_differences": [
+   "different Korg model/control-panel layout",
+   "different display content and button labels",
+   "red side accents versus plain black body",
+   "minor logo placement differences"
+  ]
+ },
+ "143": {
+  "file": "143.jpg",
+  "label": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "label_de": "KI-generierte Illustration. Kann vom tatsächlichen Produkt abweichen.",
+  "label_en": "AI-generated illustration. It may differ from the actual product.",
+  "label_pt": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "product": "Teclado Sintetizador Nord Synth 2 Pro",
+  "source_candidate": "out/143_r2_1.png",
+  "source_sha256": "d68a8f50bc03be1264931e8a1bdac4db00052ed20872e40b06a3878a0c89643e",
+  "tolerated_differences": [
+   "simplified control panel layout",
+   "slightly different knob and slider arrangement",
+   "simplified lettering on the control panel"
+  ]
+ },
+ "144": {
+  "file": "144.jpg",
+  "label": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "label_de": "KI-generierte Illustration. Kann vom tatsächlichen Produkt abweichen.",
+  "label_en": "AI-generated illustration. It may differ from the actual product.",
+  "label_pt": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "product": "Teclado Sintetizador Roland Synth 3 Pro",
+  "source_candidate": "out/144_r2_1.png",
+  "source_sha256": "df84ec6b4e6774f7dbef07fe0b9d1618654872ad4359ca6f71ac81f7484383d6",
+  "tolerated_differences": [
+   "simplified and garbled panel lettering",
+   "slightly different control layout",
+   "different display content",
+   "minor shading and hardware simplification"
+  ]
+ },
+ "145": {
+  "file": "145.jpg",
+  "label": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "label_de": "KI-generierte Illustration. Kann vom tatsächlichen Produkt abweichen.",
+  "label_en": "AI-generated illustration. It may differ from the actual product.",
+  "label_pt": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "product": "Fender Stratocaster American Pro II",
+  "source_candidate": "out/145.png",
+  "source_sha256": "2bc6d979772efb8ba9f6c4c7c800c7b6bc578db6f8d0ad76791e9f45ab6f4ce2",
+  "tolerated_differences": [
+   "vertical orientation instead of horizontal",
+   "slightly different headstock and tuning-machine depiction",
+   "simplified hardware and lettering",
+   "slightly different colour shading"
+  ]
+ },
+ "81": {
+  "file": "81.jpg",
+  "label": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "label_de": "KI-generierte Illustration. Kann vom tatsächlichen Produkt abweichen.",
+  "label_en": "AI-generated illustration. It may differ from the actual product.",
+  "label_pt": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "product": "Yamaha C40 Nylon Natural",
+  "source_candidate": "out/81.png",
+  "source_sha256": "9f8d0de90290d990f63e34ece06d25ce7f449f718f84e613b2b82cf155f63093",
+  "tolerated_differences": [
+   "simplified rosette pattern",
+   "simplified tuning machines",
+   "slightly different color shading",
+   "simplified bridge details"
+  ]
+ },
+ "82": {
+  "file": "82.jpg",
+  "label": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "label_de": "KI-generierte Illustration. Kann vom tatsächlichen Produkt abweichen.",
+  "label_en": "AI-generated illustration. It may differ from the actual product.",
+  "label_pt": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "product": "Yamaha C70 Nylon Natural",
+  "source_candidate": "out/82_r1.png",
+  "source_sha256": "9ef1d410a303fa7019d067d09e3dcd5ed7e69127a30c288c07c8dd6070f71839",
+  "tolerated_differences": [
+   "simplified rosette pattern",
+   "slightly different bridge shape",
+   "simplified tuning machines",
+   "different wood grain shading"
+  ]
+ },
+ "83": {
+  "file": "83.jpg",
+  "label": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "label_de": "KI-generierte Illustration. Kann vom tatsächlichen Produkt abweichen.",
+  "label_en": "AI-generated illustration. It may differ from the actual product.",
+  "label_pt": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "product": "Tagima Memphis AC-39 Nylon Natural",
+  "source_candidate": "out/83.png",
+  "source_sha256": "86959fd44aea368f4573bf9180258bbc33da9de335c7cd35b46707a7f753f55e",
+  "tolerated_differences": [
+   "simplified tuning-machine details",
+   "different headstock shape and small logo treatment",
+   "slightly different bridge and rosette detailing",
+   "minor colour and shading variation"
+  ]
+ },
+ "84": {
+  "file": "84.jpg",
+  "label": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "label_de": "KI-generierte Illustration. Kann vom tatsächlichen Produkt abweichen.",
+  "label_en": "AI-generated illustration. It may differ from the actual product.",
+  "label_pt": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "product": "Giannini GN-15 Nylon Cedr Natural",
+  "source_candidate": "repair7/84_a1.png",
+  "source_sha256": "abb0f95ad4ce59f1f6bbcacaf69e6b5c75b4a9c84cafb558cdfff86aee48be62",
+  "tolerated_differences": [
+   "slightly different wood colour shading",
+   "simplified tuning machines and lettering",
+   "minor differences in string rendering"
+  ]
+ },
+ "85": {
+  "file": "85.jpg",
+  "label": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "label_de": "KI-generierte Illustration. Kann vom tatsächlichen Produkt abweichen.",
+  "label_en": "AI-generated illustration. It may differ from the actual product.",
+  "label_pt": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "product": "Rozini RC-104 Nylon Estudante",
+  "source_candidate": "out/85.png",
+  "source_sha256": "f66b6eddfb9ea341b53e0376dcb63f7ed339dc132f12ca53c5e37076d25fd86d",
+  "tolerated_differences": [
+   "slightly different color shading",
+   "simplified hardware",
+   "different tag",
+   "slightly different rosette pattern"
+  ]
+ },
+ "86": {
+  "file": "86.jpg",
+  "label": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "label_de": "KI-generierte Illustration. Kann vom tatsächlichen Produkt abweichen.",
+  "label_en": "AI-generated illustration. It may differ from the actual product.",
+  "label_pt": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "product": "Tagima Dallas Tuner Aço Natural",
+  "source_candidate": "out/86_r2_1.png",
+  "source_sha256": "a568b40c4b2df5e9ca3bc5dfb6af31f11641816cd8b40bbdab81e202936be2b9",
+  "tolerated_differences": [
+   "classical-style slotted headstock instead of solid headstock",
+   "different rosette pattern",
+   "nylon-style strings instead of steel",
+   "simplified bridge and tuning-machine details"
+  ]
+ },
+ "87": {
+  "file": "87.jpg",
+  "label": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "label_de": "KI-generierte Illustration. Kann vom tatsächlichen Produkt abweichen.",
+  "label_en": "AI-generated illustration. It may differ from the actual product.",
+  "label_pt": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "product": "Yamaha F310 Aço Natural",
+  "source_candidate": "out/87.png",
+  "source_sha256": "b1e70b00991b3a9f2e06c69414349a2f66d61da44385a4f3a368f34cc2199117",
+  "tolerated_differences": [
+   "garbled text on headstock",
+   "simplified bridge pins",
+   "slightly simplified rosette",
+   "different background color"
+  ]
+ },
+ "88": {
+  "file": "88.jpg",
+  "label": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "label_de": "KI-generierte Illustration. Kann vom tatsächlichen Produkt abweichen.",
+  "label_en": "AI-generated illustration. It may differ from the actual product.",
+  "label_pt": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "product": "Giannini GF-1R Aço Folk Sunburst",
+  "source_candidate": "out/88.png",
+  "source_sha256": "327bf83f51d38683ac3b191d8afbf9b34ce216191ebce7f83b1c4947e16d073a",
+  "tolerated_differences": [
+   "simplified pickguard omission",
+   "different bridge and rosette details",
+   "simplified headstock lettering and tuning-machine hardware",
+   "slightly different sunburst shading and body proportions"
+  ]
+ },
+ "89": {
+  "file": "89.jpg",
+  "label": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "label_de": "KI-generierte Illustration. Kann vom tatsächlichen Produkt abweichen.",
+  "label_en": "AI-generated illustration. It may differ from the actual product.",
+  "label_pt": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "product": "Shelby SN-100 Folk Aço Preto",
+  "source_candidate": "out/89_r2_1.png",
+  "source_sha256": "aab7ca4561b388cfa5067c5a9431a588f04905c4f5c1532f5b8a0ee21753363b",
+  "tolerated_differences": [
+   "different headstock and tuning-machine style",
+   "different brand lettering",
+   "simplified bridge and rosette details",
+   "slightly different wood colour/shading"
+  ]
+ },
+ "90": {
+  "file": "90.jpg",
+  "label": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "label_de": "KI-generierte Illustration. Kann vom tatsächlichen Produkt abweichen.",
+  "label_en": "AI-generated illustration. It may differ from the actual product.",
+  "label_pt": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "product": "Crafter HT-100 Folk Aço Natural",
+  "source_candidate": "out/90.png",
+  "source_sha256": "7b95abbba6a09887734290ab4e79072cacf59445c254ffa62298c9b60e6de23b",
+  "tolerated_differences": [
+   "candidate is upright rather than horizontal",
+   "headstock logo/lettering differs",
+   "bridge and rosette details are simplified",
+   "tuning-machine details differ"
+  ]
+ },
+ "91": {
+  "file": "91.jpg",
+  "label": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "label_de": "KI-generierte Illustration. Kann vom tatsächlichen Produkt abweichen.",
+  "label_en": "AI-generated illustration. It may differ from the actual product.",
+  "label_pt": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "product": "Tagima Woodstock Dreadnought Natural",
+  "source_candidate": "out/91_r2_2.png",
+  "source_sha256": "c1f5843f05cc7cc39af09d4ddddafe2aa5c52cce395fcc4e8a3ee156724866a9",
+  "tolerated_differences": [
+   "cutaway body shape",
+   "side-mounted electronics panel",
+   "slightly different headstock inlay and tuning machine details"
+  ]
+ },
+ "92": {
+  "file": "92.jpg",
+  "label": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "label_de": "KI-generierte Illustration. Kann vom tatsächlichen Produkt abweichen.",
+  "label_en": "AI-generated illustration. It may differ from the actual product.",
+  "label_pt": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "product": "Yamaha FG800 Dreadnought Natural",
+  "source_candidate": "out/92_r2_1.png",
+  "source_sha256": "57d9c10ceb2e4b6a8d717c68dbfa93760e88f9598c7542bd6806e7dac2a60503",
+  "tolerated_differences": [
+   "front view instead of three-quarter view",
+   "simplified tuning-machine and bridge hardware",
+   "slightly different pickguard shape and rosette detail",
+   "simplified Yamaha lettering"
+  ]
+ },
+ "93": {
+  "file": "93.jpg",
+  "label": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "label_de": "KI-generierte Illustration. Kann vom tatsächlichen Produkt abweichen.",
+  "label_en": "AI-generated illustration. It may differ from the actual product.",
+  "label_pt": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "product": "Martin D-28 Dreadnought Natural",
+  "source_candidate": "out/93_r2_1.png",
+  "source_sha256": "c91580ae47d7e47ced94ac8d5b2a743931a90763ee1eadf0ac42b7626684f5d5",
+  "tolerated_differences": [
+   "different headstock logo/lettering",
+   "simplified rosette and hardware details",
+   "slightly different body and pickguard proportions",
+   "minor color/shading variation"
+  ]
+ },
+ "94": {
+  "file": "94.jpg",
+  "label": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "label_de": "KI-generierte Illustration. Kann vom tatsächlichen Produkt abweichen.",
+  "label_en": "AI-generated illustration. It may differ from the actual product.",
+  "label_pt": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "product": "Taylor 110e Dreadnought Natural",
+  "source_candidate": "out/94.png",
+  "source_sha256": "87b5cae27b3189dde13c8fb5b1784abe5deed148b046ef4c1be6b3cfb2064df7",
+  "tolerated_differences": [
+   "three-quarter view instead of straight front",
+   "simplified tuning machines",
+   "simplified headstock lettering",
+   "slightly different body proportions and pickguard shape"
+  ]
+ },
+ "95": {
+  "file": "95.jpg",
+  "label": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "label_de": "KI-generierte Illustration. Kann vom tatsächlichen Produkt abweichen.",
+  "label_en": "AI-generated illustration. It may differ from the actual product.",
+  "label_pt": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "product": "Takamine GD20 Dreadnought Natural",
+  "source_candidate": "out/95.png",
+  "source_sha256": "ecbaafcfd19104afc1a30715e55d0f99af89605785ec7dfbc12e6f4a9942a6c9",
+  "tolerated_differences": [
+   "different viewing angle",
+   "slightly different body proportions",
+   "simplified headstock lettering",
+   "different pickguard shape"
+  ]
+ },
+ "96": {
+  "file": "96.jpg",
+  "label": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "label_de": "KI-generierte Illustration. Kann vom tatsächlichen Produkt abweichen.",
+  "label_en": "AI-generated illustration. It may differ from the actual product.",
+  "label_pt": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "product": "Giannini GF-3D Dreadnought Sunburst",
+  "source_candidate": "out/96_r2_1.png",
+  "source_sha256": "dc1d173f9a17262241be90333e32b65f77da7a1c8d175ec006faf05a461c4a0d",
+  "tolerated_differences": [
+   "simplified/garbled headstock lettering and tuning-machine details",
+   "different pickguard color and shape",
+   "missing side-mounted hardware/electronics",
+   "slightly different sunburst shading and body proportions"
+  ]
+ },
+ "97": {
+  "file": "97.jpg",
+  "label": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "label_de": "KI-generierte Illustration. Kann vom tatsächlichen Produkt abweichen.",
+  "label_en": "AI-generated illustration. It may differ from the actual product.",
+  "label_pt": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "product": "Crafter D-8 Dreadnought Natural",
+  "source_candidate": "out/97.png",
+  "source_sha256": "0d8de695d3abdd10cbdb3cf1a0acb64467c64925ee566b505a143f64ba9bc583",
+  "tolerated_differences": [
+   "simplified headstock lettering/logo",
+   "slightly different bridge and rosette details",
+   "minor differences in tuning-machine hardware",
+   "slight color and shading variation"
+  ]
+ },
+ "98": {
+  "file": "98.jpg",
+  "label": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "label_de": "KI-generierte Illustration. Kann vom tatsächlichen Produkt abweichen.",
+  "label_en": "AI-generated illustration. It may differ from the actual product.",
+  "label_pt": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "product": "Yamaha NTX1 Elétrico Nylon Natural",
+  "source_candidate": "out/98_r1.png",
+  "source_sha256": "1ac8a8d6c6a8ea98165993ed9d54e7f0e636e9d6816bdff1658168475478366e",
+  "tolerated_differences": [
+   "simplified rosette pattern",
+   "bridge and saddle shape simplified",
+   "string rendering and tuning-machine details simplified",
+   "slight colour and wood-grain shading differences"
+  ]
+ },
+ "99": {
+  "file": "99.jpg",
+  "label": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "label_de": "KI-generierte Illustration. Kann vom tatsächlichen Produkt abweichen.",
+  "label_en": "AI-generated illustration. It may differ from the actual product.",
+  "label_pt": "Ilustração gerada por IA. Pode diferir do produto real.",
+  "product": "Tagima Classical Elétrico Nylon Sunburst",
+  "source_candidate": "out/99_r1.png",
+  "source_sha256": "e31dfac7b380c07fc86be82b1068f9a827367777df479813286f31a2e20bb7fe",
+  "tolerated_differences": [
+   "simplified or absent side-mounted preamp controls",
+   "slightly different headstock shape and tuning-machine styling",
+   "simplified rosette pattern",
+   "minor shading differences in the sunburst finish"
+  ]
+ }
+}

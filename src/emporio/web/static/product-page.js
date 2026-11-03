@@ -1,6 +1,7 @@
 import {$,state,api,esc,money,announceContext,toast} from "./api.js";
 import {text,getLanguage} from "./i18n.js";
-import {instrument} from "./art.js";
+import {productMedia} from "./product-media.js";
+import {catalogueWarning} from "./catalogue.js";
 
 const LABELS={top:"Top",back_sides:"Back & sides",neck:"Neck",strings:"Strings",scale:"Scale length",
  electronics:"Electronics",color:"Colour",body:"Body",pickups:"Pickups",pickup:"Pickup",
@@ -54,9 +55,10 @@ export async function renderProductRoute() {
   page.innerHTML=
    '<nav class="product-breadcrumb" aria-label="Breadcrumb"><a href="/" data-catalogue-link>Collection</a><span>/</span><span>'+esc(p.category_label)+'</span><span>/</span><span>'+esc(p.name)+'</span></nav>'+
    '<a href="/" class="back-to-collection" data-catalogue-link>← Back to the collection</a>'+
-   '<div class="product-page-hero"><div class="product-page-art">'+instrument(p.category_id,p.product_id)+
+   '<div class="product-page-hero"><div class="product-page-art">'+productMedia(p)+
    '<span class="illustration-caption">Instrument illustration</span></div><div class="product-page-heading">'+
    '<div class="eyebrow">'+esc(p.category_label)+'</div><h1>'+esc(p.name)+'</h1>'+
+   catalogueWarning(p)+
    '<p class="product-stock '+(p.available?"":"not-available")+'"><span class="status-dot"></span>'+
    (p.available?p.stock_quantity+' available':esc(p.status==="active"?"Out of stock":p.status.replaceAll("_"," ")))+'</p>'+
    '<div class="page-price"><strong>'+money(p.price_cents)+'</strong>'+

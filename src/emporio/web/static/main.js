@@ -3,8 +3,10 @@ import {renderCategories,loadProducts,wireCatalogue} from "./catalogue.js";
 import {wireChat} from "./chat.js";
 import {getLanguage,setLanguage,startLocalization,localize,setLanguageBusy} from "./i18n.js";
 import {wireProductPages,renderProductRoute} from "./product-page.js";
+import {loadProductMedia} from "./product-media.js";
 
 startLocalization();
+await loadProductMedia();
 
 function updateMode(config) {
  state.config=config;

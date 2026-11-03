@@ -1,4 +1,5 @@
 const PT = {
+ "AI-generated illustration. It may differ from the actual product.":"Ilustração gerada por IA. Pode diferir do produto real.",
  "Prototype knowledge check, not production authentication.":"Verificação de demonstração, não autenticação de produção.",
  "delivered":"entregue", "shipped":"enviado", "processing":"em processamento", "pending":"pendente", "cancelled":"cancelado",
 
