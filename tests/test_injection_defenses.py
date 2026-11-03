@@ -159,7 +159,9 @@ def test_failed_turn_never_leaves_executable_navigation(app):
             raise ProviderError("timed out")
     session = Session(base_url="http://model.test/v1", model="failed")
     with pytest.raises(ProviderError):
-        asyncio.run(Agent(app.state.tools, lambda *args: Failure()).reply(session, SUPPLIER_ATTACK, {}))
+        # Use a multi-round route. Known price requests now finish from catalogue
+        # evidence in one round, so their hypothetical second failure is not reached.
+        asyncio.run(Agent(app.state.tools, lambda *args: Failure()).reply(session, "Please open the ukulele category.", {}))
     assert session.pending_navigation == {}
 
 

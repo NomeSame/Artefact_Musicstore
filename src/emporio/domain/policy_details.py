@@ -3,6 +3,12 @@ from emporio.data.catalog import normalize
 
 # Key, topic, source pages, English, Brazilian Portuguese.
 DETAILS = {
+    "scope": ("store", [2, 6],
+        "We sell musical instruments only. We do not sell separate cables, amplifiers, pedals, picks, cases or replacement strings. I can help you look for an instrument instead. Which instrument are you interested in?",
+        "Vendemos apenas instrumentos musicais. Não vendemos cabos, amplificadores, pedais, palhetas, cases ou cordas avulsas. Posso ajudar a procurar um instrumento. Qual instrumento você procura?"),
+    "inactive_promotions": ("promotions", [6, 7],
+        "Inactive or expired promotions do not apply. I use only promotions marked active in the supplied snapshot. The current product quote determines the applicable single discount, without stacking.",
+        "Promoções inativas ou encerradas não se aplicam. Uso apenas promoções marcadas como ativas nos dados fornecidos. A cotação atual do produto determina o desconto único aplicável, sem acumular."),
     "instalments": ("payments", [3],
         "Credit cards allow up to 12 interest-free instalments. Section 3.1 sets a R$80 minimum per instalment for 4–6 payments and R$100 for 7–12. For up to 3 payments it states no minimum except below R$50. The general payment table also states R$100, so please confirm the applicable minimum with the team before purchase.",
         "O cartão permite até 12 parcelas sem juros. A seção 3.1 informa parcela mínima de R$80 para 4–6 parcelas e R$100 para 7–12. Para até 3 parcelas, informa ausência de mínimo, exceto abaixo de R$50. A tabela geral também informa R$100, por isso confirme com a equipe o mínimo aplicável antes da compra."),
@@ -54,6 +60,8 @@ def detail_keys(question):
     t = normalize(question)
     has = lambda *words: any(w in t for w in words)
     keys = []
+    if has('sell', 'buy', 'vendem', 'vender', 'comprar') and has('cable','amplifier','pedal','picks','cabos','amplificadores','palhetas','replacement strings','cordas avulsas'):
+        return ['scope']
     mixed = has("pix") and has("card", "cartao") and has("combin", "mix", "split", "part ", "parte", "divid", "remaining", "restante", "remainder", "%")
     if mixed:
         keys.append("mixed_payment")
@@ -82,6 +90,8 @@ def detail_keys(question):
             keys.append("local_shipping")
     if has("opening", "hours", "saturday", "sunday", "horario", "sabado", "domingo"):
         keys.append("hours")
+    if has('promotion','promoc') and has('inactive','expired','inativa','expirada','encerrada'):
+        keys.append('inactive_promotions')
     return list(dict.fromkeys(keys))
 
 def focused_policy(question):

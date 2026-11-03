@@ -15,6 +15,11 @@ def specification_lines(product, sound_only=False):
 
 def product_information(product, focus):
     name = product["name"]
+    if focus == 'weight':
+        weight=product['specs'].get('weight')
+        if weight is not None:
+            return f"The recorded weight of {name} is {weight}. Please confirm it with the team before purchase."
+        return f"The weight of {name} is not recorded in the supplied catalogue. Please ask the team to confirm it before purchase."
     if focus == "availability":
         if product["available"]:
             count = product["stock_quantity"]

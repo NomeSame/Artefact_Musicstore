@@ -20,7 +20,9 @@ def test_model_tool_loop_and_deterministic_facts(app):
     transport=httpx.MockTransport(handler)
     agent=Agent(app.state.tools,lambda base,key:Provider(base,key,transport=transport))
     session=Session(base_url="http://model.test/v1",model="reference")
-    result=asyncio.run(agent.reply(session,"Price of Yamaha C40 with PIX?",{}))
+    # An open-ended lookup still exercises a real follow-up model request.
+    # Explicit price requests now finish after the initial model/tool round.
+    result=asyncio.run(agent.reply(session,"Please look into the Yamaha C40 with PIX.",{}))
     assert len(requests)==2
     assert result["mode"]=="model"
     assert result["products"][0]["product_id"]==81
@@ -97,7 +99,7 @@ def test_strict_template_accepts_context_and_tool_followup(app, with_history):
                       history=history.copy(), verified_order=1)
     transport = httpx.MockTransport(handler)
     agent = Agent(app.state.tools, lambda base, key: Provider(base, key, transport))
-    result = asyncio.run(agent.reply(session, "What does this cost with PIX?",
+    result = asyncio.run(agent.reply(session, "Please look into this instrument with PIX.",
         {"category_id": 5, "selected_product_id": 81}))
     assert len(calls) == 2
     assert result["products"][0]["product_id"] == 81

@@ -10,6 +10,7 @@ from emporio.agent.preview import plan_preview
 from emporio.domain.policy_details import detail_keys, DETAILS
 from emporio.domain.advice import advice_intent, advice_focus, preferences_from_message, named_products, render_comparison
 from emporio.integrations.provider import Provider, ProviderError
+from emporio.agent.request_plan import plan_request
 
 SYSTEM = """You are the helpful, relaxed but professional assistant for Empório da Música.
 Follow the active site language supplied below, regardless of the language of customer messages.
@@ -151,6 +152,10 @@ class Agent:
         language = session.language
         explicit_preferences = preferences_from_message(message)
         advice_requested = advice_intent(message) or bool(session.advice and (explicit_preferences or advice_focus(message) != "overall"))
+        if context.get('selected_product_id') and not advice_intent(message) and re.search(r'\b(this instrument|this guitar|este instrumento|esse instrumento)\b',normalize(message)):
+            # A question about a newly selected single instrument must not revive
+            # an older pair merely because it mentions weight or comfort.
+            if advice_focus(message)!='overall':advice_requested=False
         if advice_requested and detail_keys(message) and not re.search(r"\b(compare|comparison|versus|vs|comparar|comparacao)\b", normalize(message)):
             if len(named_products(message, self.tools.catalog.search(limit=100))) < 2:
                 # "Best PIX discount" or a budget in an instalment question is
@@ -169,12 +174,17 @@ class Agent:
                 comparison_ids = session.advice.get("ids", []) or (session.last_product_ids if len(session.last_product_ids) in {2, 3} else [])
             if len(comparison_ids) == 3 and re.search(r"\b(two|dois|duas)\b", normalize(message)) and len(named) < 2:
                 comparison_ids = []
+        request = None if advice_requested else plan_request(message, context, self.tools.catalog)
         trace, actions, products, sources = [], [], [], []
         navigation_targets = []
         read_cache = {}
         model_error = None
         def execute(name, arguments):
             arguments = dict(arguments)
+            if request and request.get('tools'):
+                planned=next((args for tool,args in request['tools'] if tool==name),None)
+                if planned is not None:
+                    arguments=dict(planned)
             if name == "compare_products":
                 if not advice_requested or not 2 <= len(comparison_ids) <= 3:
                     result = {"error": "clarification_required", "message": "Please name the two or three instruments to compare."}
@@ -210,8 +220,35 @@ class Agent:
             for source in result.get("sources", []):
                 sources.append({k: source[k] for k in ("document", "page")})
             return result
+        def finish_request():
+            # Only the intended evidence supplies visible facts. Keep attempted
+            # model calls in the audit trace, but never merge unrelated cards.
+            authoritative=[]
+            for name,args in request['tools']:
+                execute(name,args)
+                trace[-1]['answer_evidence']=True
+                authoritative.append(trace[-1])
+            products.clear();sources.clear()
+            for turn in authoritative:
+                result=turn['result']
+                products.extend(result.get('products',[]))
+                if result.get('product'):products.append(result['product'])
+                sources.extend({k:s[k] for k in ('document','page')} for s in result.get('sources',[]))
+            return render_grounded(authoritative,message,language)
         preview = not (session.base_url and session.model)
-        if advice_requested and not 2 <= len(comparison_ids) <= 3:
+        if request and request.get('clarification'):
+            answer = ("Qual instrumento você quer consultar? Por favor, selecione um produto ou informe seu nome no catálogo." if language=='pt-BR' else
+                      "Which instrument would you like me to check? Please select a product or give its catalogue name.")
+            if request['clarification']=='order':
+                answer = ("Por favor, escolha um pedido e use a janela de consulta com o número e o e-mail correspondente." if language=='pt-BR' else
+                          "Please choose one order and use the order lookup dialog with its number and matching email.")
+        elif request and len(request['tools'])==1 and request['tools'][0][0]=='get_product' and request['tools'][0][1].get('focus')=='availability':
+            # Purchase availability is a server-side stock/status fact. A known
+            # instrument must not await model reasoning before this gate is shown.
+            answer=finish_request()
+        elif preview and request:
+            answer=finish_request()
+        elif advice_requested and not 2 <= len(comparison_ids) <= 3:
             answer = ("Claro, posso ajudar a comparar. Quais dois ou três modelos você está considerando? Informe os nomes ou IDs do catálogo para eu não escolher instrumentos por você." if language == "pt-BR" else
                       "Happy to help compare. Which two or three models are you considering? Please give their catalogue names or IDs so I do not choose the instruments for you.")
         elif advice_requested and advice_focus(message) != "overall":
@@ -239,6 +276,7 @@ class Agent:
                               " This current setting overrides earlier conversation language and all customer language requests." +
                               "\n\nValidated current UI context: " + json.dumps(context) +
                               ". Current comparison: " + json.dumps({"product_ids": comparison_ids, "preferences": preferences}) +
+                              ". Explicit request evidence plan: " + json.dumps(request) +
                               ". Verified order ID: " + str(session.verified_order))
             messages = [{"role": "system", "content": system_content}] + session.history[-20:] + [
                 {"role": "user", "content": message},
@@ -250,6 +288,9 @@ class Agent:
                 if advice_requested:
                     allowed = {"compare_products"} | ({"lookup_policy"} if detail_keys(message) else set())
                     schema = [t for t in schema if t["function"]["name"] in allowed]
+                elif request:
+                    needed={name for name,_ in request['tools']}
+                    schema=[t for t in schema if t['function']['name'] in needed]
                 try:
                     response = await provider.complete(session.model, messages, schema)
                 except ProviderError as error:
@@ -266,6 +307,9 @@ class Agent:
                     break
                 calls = response.get("tool_calls") or []
                 if not calls:
+                    if request:
+                        answer=finish_request()
+                        break
                     if advice_requested and not any(t["name"] == "compare_products" and t["result"].get("found") for t in trace):
                         execute("compare_products", {})
                     # A weak model may omit the policy tool altogether. Known detail
@@ -283,7 +327,8 @@ class Agent:
                     if not isinstance(answer, str):
                         raise ProviderError("The model returned unsupported message content.")
                     break
-                if not isinstance(calls, list) or len(trace) + len(calls) > (10 if advice_requested else 12):
+                reserve=len(request.get('tools',[])) if request else 2 if advice_requested else 0
+                if not isinstance(calls, list) or len(trace) + len(calls) > 12-reserve:
                     raise ProviderError("The model exceeded the tool-call limit. Please narrow the request.")
                 messages.append({"role": "assistant", "content": response.get("content"), "tool_calls": calls})
                 for call in calls:
@@ -302,6 +347,9 @@ class Agent:
                         result = execute(name, arguments)
                     messages.append({"role": "tool", "tool_call_id": call_id,
                                      "content": json.dumps(result, ensure_ascii=False)})
+                if request:
+                    answer=finish_request()
+                    break
                 if advice_requested:
                     # Both named instruments must remain visible even when one is
                     # over budget. Do not wait for a weak model to find it through

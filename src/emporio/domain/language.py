@@ -63,6 +63,8 @@ def translate(text, language="en"):
     if text in EXACT_PT:
         return EXACT_PT[text]
     patterns = [
+        (r"The weight of (.+) is not recorded in the supplied catalogue\. Please ask the team to confirm it before purchase\.", lambda m: f"O peso de {m[1]} não está registrado no catálogo fornecido. Por favor, peça à equipe uma confirmação antes da compra."),
+        (r"The recorded weight of (.+) is (.+)\. Please confirm it with the team before purchase\.", lambda m: f"O peso registrado de {m[1]} é {m[2]}. Por favor, confirme com a equipe antes da compra."),
         (r"I found (\d+) matching instrument(s?)\. The card(?:s)? below use(?:s)? prices and stock from the supplied catalogue\.", lambda m: f"Encontrei {m[1]} instrumento{'s' if m[2] else ''}. " + ("Os cartões abaixo mostram" if m[2] else "O cartão abaixo mostra") + " preços e estoque do catálogo fornecido."),
         (r"Here are the recorded sound and setup details for (.+)\.", lambda m: f"Estas são as informações de som e configuração registradas para {m[1]}."),
         (r"Here are the recorded specifications for (.+)\.", lambda m: f"Estas são as especificações registradas para {m[1]}."),
