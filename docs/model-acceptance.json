@@ -1,0 +1,480 @@
+{
+  "schema_version": 1,
+  "recorded_utc": "2026-11-03T17:15:06.134967+00:00",
+  "model_id": "Bonsai27B",
+  "base_url": "http://127.0.0.1:8080/v1",
+  "reported_server_configuration": {
+    "weights": "Bonsai-27B-Q1_0.gguf",
+    "reasoning_effort": "xhigh",
+    "settings_changed_for_test": false
+  },
+  "working_tree_revision_label": "64da508+acceptance-fixes",
+  "application_source_sha256": {
+    "src/emporio/__init__.py": "7d93a94aa02ce32cbf2a5cc2c03dcf909c6a4a16d3813d6e762b9d55ca7d4f7a",
+    "src/emporio/agent/engine.py": "48d91566505628a726a2bd7ad1a7fd52eaed842979ab7773a2a018ca27514a1c",
+    "src/emporio/agent/preview.py": "7a633a7a655ce798e1f554196d3f7f7ff6c4bce529547a5b1a932077e57f432a",
+    "src/emporio/agent/request_plan.py": "959e165927be1a0c951857251420ebe259c245010d7716f0d565e80c7e57298c",
+    "src/emporio/agent/tools.py": "67bd01338c05330f7288f0dd306701e3de038ae7c95d6fcd5c6bab52332ee47c",
+    "src/emporio/data/catalog.py": "ccd1b63cdce724d7975a777a7fdc583695dc4d051cd1ece0e285782e6f0b7d94",
+    "src/emporio/data/policies.py": "5fd365c4e4e09570c05ab222951ac89c76859a7463a80e303f9346caa4c95f69",
+    "src/emporio/domain/advice.py": "7a5f34ea24c04ec73e5c2ade871edc67989a31548afa56e739cc41e12710ca4a",
+    "src/emporio/domain/language.py": "280d8eb220b49cfbdc4e6b76b0f1ec430a30ce0eb86f9f790093eff767a5414c",
+    "src/emporio/domain/policy_details.py": "eb5bb35fcc8302bd8c31dd8bed13b77ff31d3da2327eef4d0803b9668927daa5",
+    "src/emporio/domain/pricing.py": "0d58a6ac652bdaacd0a67d8d9ef77361a0e83dc7222d7b0b5d5f7ef832b35b5b",
+    "src/emporio/domain/product_information.py": "884bc5836a804a49ed065107ce9555a6c13a80238812f51370b212eec8deb4ce",
+    "src/emporio/integrations/mcp_server.py": "e6c7c3b110b0e0427574054e01bb5a71f6a53bf832e9db8a496d01adc14a6723",
+    "src/emporio/integrations/provider.py": "1efd855035d9e250ebfe90fd6b7d0d0deadc303aade940fd9a082b2544a60759",
+    "src/emporio/main.py": "3958573ddb7742973e4f82229b4bc9891c88d1fb7cf1515453410ed46d6f07b9",
+    "src/emporio/session/state.py": "ea4cd704a94446332266a89e61af5ba0dfae928ceb5faaec5d0fabb306c46970",
+    "src/emporio/web/__init__.py": "b21707dd223b58d41aea833e8cf3b57e72f858d0ddb29878d2b1d414e0121a4b",
+    "src/emporio/web/app.py": "06a1a857ff60dda1afe9a0224978d52853b02f350417051d43d7a9e11363e619"
+  },
+  "fixture_sha256": {
+    "desafio_tecnico_ai_eng - categories.csv": "7a7901e16c8c6357a956031ada45a6fd6a4cc9bd7bc1edc05448cc55b01b0a9e",
+    "desafio_tecnico_ai_eng - customers.csv": "1cd724dc86eac6258913cc890abf23d3893c57a99c9325ebfb91dfad3c7b0f37",
+    "desafio_tecnico_ai_eng - order_items.csv": "7656eb681821d48e0c932f61d3188309b955c25446578235f2d8e69604b0f0bc",
+    "desafio_tecnico_ai_eng - orders.csv": "deb9c2480605d8d22117d569f0045fd156c5e9a58ffeebb847ff61b3b9512fd5",
+    "desafio_tecnico_ai_eng - products.csv": "78d911d96ee891abb163b6c858e895025aa530ab27d0290540f05d5098377c12",
+    "desafio_tecnico_ai_eng - promotions.csv": "cbe08c7e91b00437c0c00a7ef1486deba73de52d23e3f97f51a7dbd557d759e0",
+    "políticas_da_loja.pdf": "b7527f96896929f4ba929de117651c6717e25b7a3b92b34bc54d5ba32f6156f7"
+  },
+  "results": {
+    "baseline_original": {
+      "passed": 16,
+      "steps": 24
+    },
+    "baseline_reviewed_with_final_checks": {
+      "passed": 14,
+      "steps": 24
+    },
+    "first_repaired_run": {
+      "passed": 23,
+      "steps": 24,
+      "failed_case": "C07",
+      "reason": "45-second provider timeout"
+    },
+    "second_repaired_run": {
+      "passed": 23,
+      "steps": 24,
+      "failed_case": "C07",
+      "reason": "45-second provider timeout"
+    },
+    "final": {
+      "passed": 24,
+      "steps": 24,
+      "chat_turns": 21,
+      "model_backed_chat_turns": 17,
+      "direct_chat_turns": 4,
+      "verification_and_reset_api_events": 3,
+      "provider_calls": 18
+    }
+  },
+  "final_cases": [
+    {
+      "id": "S01",
+      "group": "service",
+      "kind": "chat",
+      "http_status": 200,
+      "passed": true,
+      "checks": {
+        "http": true,
+        "connected_mode": true,
+        "no_degraded_model": true,
+        "language": true,
+        "friendly_greeting": true
+      },
+      "provider_calls": 1,
+      "seconds": 4.18
+    },
+    {
+      "id": "S02",
+      "group": "service",
+      "kind": "chat",
+      "http_status": 200,
+      "passed": true,
+      "checks": {
+        "http": true,
+        "connected_mode": true,
+        "no_degraded_model": true,
+        "language": true,
+        "shop_redirect": true,
+        "no_weather_claim": true
+      },
+      "provider_calls": 1,
+      "seconds": 9.62
+    },
+    {
+      "id": "S03",
+      "group": "service",
+      "kind": "chat",
+      "http_status": 200,
+      "passed": true,
+      "checks": {
+        "http": true,
+        "connected_mode": true,
+        "no_degraded_model": true,
+        "language": true,
+        "accessory_scope": true
+      },
+      "provider_calls": 1,
+      "seconds": 40.57
+    },
+    {
+      "id": "S04",
+      "group": "service",
+      "kind": "chat",
+      "http_status": 200,
+      "passed": true,
+      "checks": {
+        "http": true,
+        "connected_mode": true,
+        "no_degraded_model": true,
+        "language": true,
+        "no_arbitrary_product": true,
+        "clarifies": true
+      },
+      "provider_calls": 0,
+      "seconds": 0.0
+    },
+    {
+      "id": "S05",
+      "group": "service",
+      "kind": "chat",
+      "http_status": 200,
+      "passed": true,
+      "checks": {
+        "http": true,
+        "connected_mode": true,
+        "no_degraded_model": true,
+        "language": true,
+        "correct_product": true,
+        "correct_quote": true,
+        "price_answered": true
+      },
+      "provider_calls": 1,
+      "seconds": 7.89
+    },
+    {
+      "id": "S06",
+      "group": "service",
+      "kind": "chat",
+      "http_status": 200,
+      "passed": true,
+      "checks": {
+        "http": true,
+        "connected_mode": true,
+        "no_degraded_model": true,
+        "language": true,
+        "missing_weight_explicit": true
+      },
+      "provider_calls": 1,
+      "seconds": 7.13
+    },
+    {
+      "id": "S07",
+      "group": "service",
+      "kind": "chat",
+      "http_status": 200,
+      "passed": true,
+      "checks": {
+        "http": true,
+        "connected_mode": true,
+        "no_degraded_model": true,
+        "language": true,
+        "forced_pt": true
+      },
+      "provider_calls": 1,
+      "seconds": 16.96
+    },
+    {
+      "id": "S08",
+      "group": "service",
+      "kind": "chat",
+      "http_status": 200,
+      "passed": true,
+      "checks": {
+        "http": true,
+        "connected_mode": true,
+        "no_degraded_model": true,
+        "language": true,
+        "forced_en": true
+      },
+      "provider_calls": 1,
+      "seconds": 12.09
+    },
+    {
+      "id": "C01",
+      "group": "catalogue",
+      "kind": "chat",
+      "http_status": 200,
+      "passed": true,
+      "checks": {
+        "http": true,
+        "connected_mode": true,
+        "no_degraded_model": true,
+        "language": true,
+        "matching_cards": true
+      },
+      "provider_calls": 1,
+      "seconds": 4.91
+    },
+    {
+      "id": "C02",
+      "group": "catalogue",
+      "kind": "chat",
+      "http_status": 200,
+      "passed": true,
+      "checks": {
+        "http": true,
+        "connected_mode": true,
+        "no_degraded_model": true,
+        "language": true,
+        "correct_product": true,
+        "correct_quote": true,
+        "price_answered": true
+      },
+      "provider_calls": 1,
+      "seconds": 13.58
+    },
+    {
+      "id": "C03",
+      "group": "catalogue",
+      "kind": "chat",
+      "http_status": 200,
+      "passed": true,
+      "checks": {
+        "http": true,
+        "connected_mode": true,
+        "no_degraded_model": true,
+        "language": true,
+        "correct_product": true,
+        "correct_quote": true,
+        "price_answered": true
+      },
+      "provider_calls": 1,
+      "seconds": 40.59
+    },
+    {
+      "id": "C04",
+      "group": "catalogue",
+      "kind": "chat",
+      "http_status": 200,
+      "passed": true,
+      "checks": {
+        "http": true,
+        "connected_mode": true,
+        "no_degraded_model": true,
+        "language": true,
+        "correct_product": true,
+        "correct_quote": true,
+        "price_answered": true,
+        "inactive_excluded": true
+      },
+      "provider_calls": 1,
+      "seconds": 44.09
+    },
+    {
+      "id": "C05",
+      "group": "catalogue",
+      "kind": "chat",
+      "http_status": 200,
+      "passed": true,
+      "checks": {
+        "http": true,
+        "connected_mode": true,
+        "no_degraded_model": true,
+        "language": true,
+        "correct_product": true,
+        "correct_quote": true,
+        "price_answered": true,
+        "no_partial_pix": true
+      },
+      "provider_calls": 1,
+      "seconds": 4.53
+    },
+    {
+      "id": "C06",
+      "group": "catalogue",
+      "kind": "chat",
+      "http_status": 200,
+      "passed": true,
+      "checks": {
+        "http": true,
+        "connected_mode": true,
+        "no_degraded_model": true,
+        "language": true,
+        "status_explained": true,
+        "not_available": true
+      },
+      "provider_calls": 0,
+      "seconds": 0.01
+    },
+    {
+      "id": "C07",
+      "group": "catalogue",
+      "kind": "chat",
+      "http_status": 200,
+      "passed": true,
+      "checks": {
+        "http": true,
+        "connected_mode": true,
+        "no_degraded_model": true,
+        "language": true,
+        "status_explained": true,
+        "not_available": true
+      },
+      "provider_calls": 0,
+      "seconds": 0.01
+    },
+    {
+      "id": "C08",
+      "group": "catalogue",
+      "kind": "chat",
+      "http_status": 200,
+      "passed": true,
+      "checks": {
+        "http": true,
+        "connected_mode": true,
+        "no_degraded_model": true,
+        "language": true,
+        "status_explained": true,
+        "not_available": true
+      },
+      "provider_calls": 0,
+      "seconds": 0.01
+    },
+    {
+      "id": "C09",
+      "group": "catalogue",
+      "kind": "chat",
+      "http_status": 200,
+      "passed": true,
+      "checks": {
+        "http": true,
+        "connected_mode": true,
+        "no_degraded_model": true,
+        "language": true,
+        "not_invented": true
+      },
+      "provider_calls": 2,
+      "seconds": 21.01
+    },
+    {
+      "id": "O01",
+      "group": "orders",
+      "kind": "chat",
+      "http_status": 200,
+      "passed": true,
+      "checks": {
+        "http": true,
+        "connected_mode": true,
+        "no_degraded_model": true,
+        "language": true,
+        "verification_requested": true,
+        "no_tracking_leak": true
+      },
+      "provider_calls": 1,
+      "seconds": 13.22
+    },
+    {
+      "id": "O02",
+      "group": "orders",
+      "kind": "verify_wrong",
+      "http_status": 403,
+      "passed": true,
+      "checks": {
+        "http": true
+      },
+      "provider_calls": 0,
+      "seconds": 0.0
+    },
+    {
+      "id": "O03",
+      "group": "orders",
+      "kind": "verify_correct",
+      "http_status": 200,
+      "passed": true,
+      "checks": {
+        "http": true
+      },
+      "provider_calls": 0,
+      "seconds": 0.0
+    },
+    {
+      "id": "O04",
+      "group": "orders",
+      "kind": "chat",
+      "http_status": 200,
+      "passed": true,
+      "checks": {
+        "http": true,
+        "connected_mode": true,
+        "no_degraded_model": true,
+        "language": true,
+        "verified_status": true,
+        "order_tool": true
+      },
+      "provider_calls": 1,
+      "seconds": 8.45
+    },
+    {
+      "id": "O05",
+      "group": "orders",
+      "kind": "chat",
+      "http_status": 200,
+      "passed": true,
+      "checks": {
+        "http": true,
+        "connected_mode": true,
+        "no_degraded_model": true,
+        "language": true,
+        "verification_requested": true,
+        "no_tracking_leak": true
+      },
+      "provider_calls": 1,
+      "seconds": 17.25
+    },
+    {
+      "id": "O06",
+      "group": "orders",
+      "kind": "reset",
+      "http_status": 200,
+      "passed": true,
+      "checks": {
+        "http": true
+      },
+      "provider_calls": 0,
+      "seconds": 0.0
+    },
+    {
+      "id": "O07",
+      "group": "orders",
+      "kind": "chat",
+      "http_status": 200,
+      "passed": true,
+      "checks": {
+        "http": true,
+        "connected_mode": true,
+        "no_degraded_model": true,
+        "language": true,
+        "verification_requested": true,
+        "no_tracking_leak": true
+      },
+      "provider_calls": 1,
+      "seconds": 2.53
+    }
+  ],
+  "documents": {
+    "catalogue": "../examples/01-catalogue-live.md",
+    "orders": "../examples/02-orders-live.md",
+    "service": "../examples/03-service-context-live.md"
+  },
+  "limits": [
+    "Prepared functional scenarios, not independent customer testing.",
+    "Controlled factual renderer and direct application guards are part of the system under test.",
+    "Not a full raw-model capability or latency guarantee.",
+    "Final live injection campaign remains open as TODO 1.5."
+  ],
+  "raw_evidence": ".runtime/model-acceptance-verified",
+  "original_previews_archive": ".runtime/preview-examples-before-acceptance"
+}
