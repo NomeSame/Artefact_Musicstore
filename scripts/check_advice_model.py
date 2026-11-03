@@ -6,6 +6,8 @@ import time
 import httpx
 from datetime import datetime, timezone
 from pathlib import Path
+import sys
+sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'src'))
 from emporio.agent.engine import Agent
 from emporio.integrations.provider import Provider
 from emporio.session.state import Session

@@ -16,8 +16,9 @@ SCENARIOS=[
     ]),
 ]
 def main():
-    output=ROOT/"examples"
-    output.mkdir(exist_ok=True)
+    # Preview diagnostics must never overwrite or expand the final live examples.
+    output=ROOT/".runtime"/"preview-examples"
+    output.mkdir(parents=True,exist_ok=True)
     for name,turns in SCENARIOS:
         with httpx.Client(base_url="http://127.0.0.1:8765",trust_env=False,timeout=30) as client:
             client.get("/api/bootstrap").raise_for_status()
