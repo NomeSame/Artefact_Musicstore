@@ -98,6 +98,8 @@ def compare(catalog, product_ids, max_price=None, string_type=None, electronics=
     assessments = []
     for p in products:
         checks = {'available': p['available']}
+        if p.get('catalogue_conflict'):
+            checks['catalogue_details'] = None
         if max_price is not None:
             checks['budget'] = p['price_cents'] <= cents(max_price)
         if string_type:
@@ -154,6 +156,8 @@ def render_comparison(result, language='en'):
         details = []
         for key in chosen:
             val = p['specs'].get(key)
+            if key in p.get('unconfirmed_fields', []):
+                val = 'não confirmado' if pt else 'unconfirmed'
             val = str(val) if val is not None else ('não informado' if pt else 'not recorded')
             details.append(f'{labels[key][0 if pt else 1]} {val}')
         parts.append(f"{p['name']} — {money(p['price_cents'])}, {availability}." + (' ' + ', '.join(details) + '.' if details else ''))
@@ -172,6 +176,10 @@ def render_comparison(result, language='en'):
             if criterion == 'available' or valid is True:
                 continue
             if valid is None:
+                if criterion == 'catalogue_details':
+                    parts.append((f'Para {name}, confirme os dados conflitantes com a equipe antes de considerar uma recomendação.' if pt else
+                                  f'For {name}, please confirm the conflicting details with the team before treating it as a recommendation.'))
+                    continue
                 reason = ('A informação necessária sobre cordas ou eletrônica não está registrada.' if pt else
                           'The required string or electronics detail is not recorded.')
                 parts.append((f'Para {name}, ' if pt else f'For {name}, ') + reason[0].lower() + reason[1:])

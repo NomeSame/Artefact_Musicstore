@@ -2,6 +2,7 @@
 import json
 import re
 from pathlib import Path
+from emporio.data.corrections import CORRECTIONS, catalogue_warning
 
 DESCRIPTIONS_EN = json.loads((Path(__file__).parents[1] / "data/descriptions_en.json").read_text(encoding="utf-8"))
 CATEGORY_PT = {1:"Guitarras",2:"Contrabaixos",3:"Baterias e percussão",4:"Teclados e pianos",5:"Violões",6:"Sopros de madeira",7:"Metais",8:"Cordas de orquestra",9:"Ukuleles"}
@@ -16,6 +17,7 @@ POLICIES_PT = {
 "privacy":"O manual limita o uso de dados pessoais ao atendimento, aos pedidos e às finalidades informadas. Marketing exige consentimento expresso. Este protótipo local verifica número do pedido e e-mail correspondente apenas para demonstração, não como autenticação de produção."
 }
 EXACT_PT = {
+"These catalogue results include conflicting details. Entries with a warning are not confirmed recommendations. Please confirm their marked details with the team before choosing. Prices and stock still come from the supplied snapshot.":"Estes resultados do catálogo incluem informações conflitantes. Os produtos com aviso não são recomendações confirmadas. Por favor, confirme os detalhes sinalizados com a equipe antes de escolher. Os preços e o estoque continuam vindo dos dados fornecidos.",
 "I could not complete that request.":"Não consegui concluir essa solicitação.",
 "I could not find that product in the supplied catalogue.":"Não encontrei esse produto no catálogo fornecido.",
 "I could not find that order in the supplied data.":"Não encontrei esse pedido nos dados fornecidos.",
@@ -43,13 +45,17 @@ EXACT_PT = {
 
 
 def description(product, language="en"):
-    return product["description"] if language == "pt-BR" else DESCRIPTIONS_EN.get(str(product["product_id"]), product["description"])
+    source_id = CORRECTIONS.get(product["product_id"], {}).get("description_source_product_id", product["product_id"])
+    return product["description"] if language == "pt-BR" else DESCRIPTIONS_EN.get(str(source_id), product["description"])
 
 
 def product_for_language(product, language="en"):
     if not product:
         return product
     localized = {**product, "description": description(product, language), "language": language}
+    warning = catalogue_warning(product["product_id"], language)
+    if warning:
+        localized["catalogue_warning"] = warning
     values_en = {"Preto":"Black","Branco":"White","Vermelho":"Red","Azul":"Blue","Mogno":"Mahogany","Spruce Sólido":"Solid spruce","Spruce Engelmann Sólido":"Solid Engelmann spruce","Nato Sólido":"Solid Nato","Cedro":"Cedar"}
     localized["specs"] = {k: (WORDS_PT.get(v,v) if language == "pt-BR" else values_en.get(v,v)) for k,v in product["specs"].items()}
     if language == "pt-BR":
