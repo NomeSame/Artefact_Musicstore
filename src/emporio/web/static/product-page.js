@@ -1,4 +1,5 @@
 import {$,state,api,esc,money,announceContext,toast} from "./api.js";
+import {text,getLanguage} from "./i18n.js";
 import {instrument} from "./art.js";
 
 const LABELS={top:"Top",back_sides:"Back & sides",neck:"Neck",strings:"Strings",scale:"Scale length",
@@ -14,11 +15,21 @@ export function productQuestions(product) {
   {label:"Delivery",prompt:"What are the delivery options and rules for this instrument?"},
   {label:"Returns",prompt:"What are the return conditions for this instrument?"},
   {label:"Warranty",prompt:"What warranty information is available for this instrument?"},
- ];
+ ].map(q=>({label:text(q.label),prompt:text(q.prompt)}));
 }
 export function askAboutProduct(product,prompt="") {
  state.selected=product;state.category=product.category_id;announceContext();
  document.dispatchEvent(new CustomEvent("prepare-product-chat",{detail:{product,prompt}}));
+}
+function scrollProductSection(id,behavior="smooth") {
+ const page=$("#product-page"),target=document.getElementById(id);
+ if(!target||!page.contains(target)||!target.classList.contains("product-page-section"))return;
+ page.querySelectorAll(".product-section-links a").forEach(link=>{
+  if(link.hash==="#"+id)link.setAttribute("aria-current","location");
+  else link.removeAttribute("aria-current");
+ });
+ target.setAttribute("tabindex","-1");
+ target.scrollIntoView({behavior,block:"start"});target.focus({preventScroll:true});
 }
 let routeVersion=0;
 export async function renderProductRoute() {
@@ -52,13 +63,12 @@ export async function renderProductRoute() {
    (p.discount_percent?'<del>'+money(p.list_cents)+'</del><span class="discount-pill">'+p.discount_percent+'% off</span>':'')+'</div>'+
    '<p class="price-condition">'+(p.payment==="pix"?'Price with full PIX payment.':'Current quote. Best price with full PIX payment '+money(p.pix_price_cents)+'.')+' Discounts never stack.</p>'+
    '<div class="product-highlights">'+primary.map(([key,value])=>'<div><span>'+esc(LABELS[key]??key.replaceAll("_"," "))+'</span><strong>'+esc(value)+'</strong></div>').join("")+'</div>'+
-   '<button class="primary-button" id="page-ask-product">Talk to your music guide ↗</button>'+
-   '<p class="page-ask-note">Explore the details, choose a question or write your own. Nothing is sent until you press Send.</p>'+
+   '<p class="page-ask-note">Explore the details below, choose a topic or write your own question. Nothing is sent until you press Send.</p>'+
    '</div></div>'+
    '<nav class="product-section-links" aria-label="Product information"><a href="#product-overview">Overview</a><a href="#product-specs">Specifications</a><a href="#product-buying">Before you choose</a><a href="#product-store-policies">Delivery & care</a></nav>'+
    '<section class="product-page-section" id="product-overview"><span class="eyebrow">GET TO KNOW THE INSTRUMENT</span><h2>A closer look.</h2>'+
-   '<p class="product-description" lang="pt-BR">'+esc(p.description)+'</p><p class="source-caption">Original catalogue description. Ask the guide to explore the recorded specifications.</p></section>'+
-   '<section class="product-page-section" id="product-specs"><div class="section-title-row"><div><span class="eyebrow">THE DETAILS THAT MATTER</span><h2>Specifications.</h2></div><button class="text-button" data-question="0">Discuss the specifications ↗</button></div>'+
+   '<p class="product-description" lang="'+getLanguage()+'">'+esc(p.description)+'</p><p class="source-caption">Catalogue description translated from the Portuguese source. Ask the guide to explore the recorded specifications.</p></section>'+
+   '<section class="product-page-section" id="product-specs"><div class="section-title-row"><div><span class="eyebrow">THE DETAILS THAT MATTER</span><h2>Specifications.</h2></div></div>'+
    '<dl class="full-specs">'+facts.map(([key,value])=>'<div><dt>'+esc(LABELS[key]??key.replaceAll("_"," "))+'</dt><dd>'+esc(value)+'</dd></div>').join("")+'</dl></section>'+
    '<section class="product-page-section" id="product-buying"><span class="eyebrow">FIND YOUR FIT</span><h2>Before you choose.</h2>'+
    '<p>How an instrument feels in your hands matters as much as the specifications. Tell the guide about your experience, the music you play and where you plan to use it.</p>'+
@@ -71,8 +81,13 @@ export async function renderProductRoute() {
    '<p class="product-page-footnote">Availability and prices come from the supplied store catalogue. This prototype does not take payments or place orders.</p>';
   page.querySelectorAll("[data-catalogue-link]").forEach(link=>link.addEventListener("click",event=>{event.preventDefault();showCollection();}));
   page.querySelectorAll("[data-question]").forEach(button=>button.addEventListener("click",()=>askAboutProduct(p,productQuestions(p)[Number(button.dataset.question)].prompt)));
-  $("#page-ask-product").addEventListener("click",()=>askAboutProduct(p));
   $("#page-own-question").addEventListener("click",()=>askAboutProduct(p));
+  page.querySelectorAll(".product-section-links a").forEach(link=>link.addEventListener("click",event=>{
+   event.preventDefault();
+   history.replaceState(history.state,"",location.pathname+link.hash);
+   scrollProductSection(link.hash.slice(1));
+  }));
+  if(location.hash)requestAnimationFrame(()=>scrollProductSection(location.hash.slice(1),"auto"));
  }catch(error) {
   if(version!==routeVersion)return;
   page.innerHTML='<div class="empty-state"><h1>We could not find that instrument.</h1><p>'+esc(error.message)+'</p><a class="primary-button" href="/">Back to the collection</a></div>';
@@ -81,7 +96,7 @@ export async function renderProductRoute() {
 export async function openProductPage(id) {
  const path="/products/"+id;
  if(location.pathname!==path)history.pushState({product:id},"",path);
- await renderProductRoute();window.scrollTo({top:0,behavior:"smooth"});
+ await renderProductRoute();if(!location.hash)window.scrollTo({top:0,behavior:"smooth"});
 }
 export function showCollection() {
  if(location.pathname!=="/")history.pushState({},"","/");

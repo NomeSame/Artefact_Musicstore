@@ -25,7 +25,7 @@ def product_information(product, focus):
     if focus == "sound":
         details = "\n".join(lines) if lines else "No sound-related specifications are recorded for this instrument."
         return (f"Here are the recorded sound and setup details for {name}.\n{details}\n\n"
-                "Specifications cannot confirm its tone or playing feel. Ask the team about a listening demo or trying it in person.")
+                "Specifications cannot confirm its tone or playing feel. Please, ask the team about a listening demo or trying it in person.")
     if focus == "specifications":
         details = "\n".join(specification_lines(product)) or "No technical specifications are recorded."
         return f"Here are the recorded specifications for {name}.\n{details}"

@@ -1,4 +1,5 @@
 import {$,state,api,esc,money,announceContext,showDialog,toast} from "./api.js";
+import {getLanguage} from "./i18n.js";
 import {instrument} from "./art.js";
 let requestId=0;
 export function renderCategories() {
@@ -41,7 +42,11 @@ export function renderProducts() {
  $("#products").querySelectorAll("[data-product]").forEach(b=>b.addEventListener("click",()=>selectProduct(Number(b.dataset.product))));
 }
 export async function selectProduct(id,open=true) {
- const p=state.cache.get(id);if(!p){toast("This instrument is not in the current catalogue.");return;}
+ let p=state.cache.get(id);
+ if(!p||p.language!==getLanguage()){
+  try{p=(await api("/api/products/"+id+"?payment="+encodeURIComponent($("#payment").value))).product;state.cache.set(id,p);}
+  catch(error){toast(error.message);return;}
+ }
  state.selected=p;
  if(state.category!==p.category_id){state.category=p.category_id;$("#search").value="";$("#max-price").value="";renderCategories();await loadProducts();}
  renderProducts();announceContext();

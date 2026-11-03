@@ -14,6 +14,7 @@ from emporio.agent.tools import Tools, SearchInput
 from emporio.agent.engine import Agent
 from emporio.integrations.provider import Provider, ProviderError, validate_base_url
 from emporio.session.state import Sessions
+from emporio.domain.language import product_for_language, POLICIES_PT
 
 ROOT = Path(__file__).resolve().parents[3]
 STATIC = Path(__file__).parent / "static"
@@ -33,7 +34,12 @@ class Context(BaseModel):
     payment: Literal["unspecified", "pix", "card", "debit", "boleto"] = "unspecified"
     visible_product_ids: list[int] = Field(default_factory=list, max_length=100)
 
+class LanguageInput(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    language: Literal["en", "pt-BR"]
+
 class ChatInput(BaseModel):
+    language: Literal["en", "pt-BR"] | None = None
     message: str = Field(min_length=1, max_length=3000)
     context: Context = Field(default_factory=Context)
 
@@ -95,21 +101,29 @@ def create_app(root=ROOT, db_path=None, provider_factory=Provider):
     @app.get("/api/bootstrap")
     def bootstrap(session=Depends(session_for)):
         return {"categories": catalog.categories(), "product_count": len(catalog.search()),
-                "config": public_config(session), "snapshot": True, "verified_order": session.verified_order}
+                "config": public_config(session), "language": session.language, "snapshot": True, "verified_order": session.verified_order}
+
+    @app.post("/api/language")
+    async def set_language(body: LanguageInput, session=Depends(session_for)):
+        async with session.lock:
+            session.language = body.language
+            session.pending_navigation.clear()
+        return {"language": session.language}
 
     @app.get("/api/products")
     def products(query: str = "", category_id: int | None = None, max_price: float | None = None,
-                 available_only: bool = False, payment: str = "unspecified", sort: str = "recommended"):
+                 available_only: bool = False, payment: str = "unspecified", sort: str = "recommended",
+                 language: Literal["en", "pt-BR"] = "en"):
         try:
             args = SearchInput(query=query, category_id=category_id, max_price=max_price,
                                available_only=available_only, payment=payment).model_dump()
             result = catalog.search(**args, sort=sort)
-            return {"products": result, "count": len(result)}
+            return {"products": [product_for_language(p, language) for p in result], "count": len(result)}
         except ValueError:
             raise HTTPException(422, "Invalid catalogue filters.") from None
 
     @app.get("/api/products/{product_id}")
-    def product_details(product_id: int, payment: str = "unspecified"):
+    def product_details(product_id: int, payment: str = "unspecified", language: Literal["en", "pt-BR"] = "en"):
         try:
             if payment not in {"unspecified", "pix", "card", "debit", "boleto"}:
                 raise ValueError
@@ -121,10 +135,10 @@ def create_app(root=ROOT, db_path=None, provider_factory=Provider):
         buying_policies = []
         for topic in ("delivery", "returns", "warranty"):
             policy = policies.lookup(topic)
-            buying_policies.append({"topic": topic, "summary": policy["summary"],
+            buying_policies.append({"topic": topic, "summary": POLICIES_PT[topic] if language == "pt-BR" else policy["summary"],
                 "sources": [{"document": source["document"], "page": source["page"]}
                             for source in policy["sources"]]})
-        return {"product": product, "policies": buying_policies}
+        return {"product": product_for_language(product, language), "policies": buying_policies}
 
     @app.get("/products/{product_id}")
     def product_page(product_id: int):
@@ -183,6 +197,8 @@ def create_app(root=ROOT, db_path=None, provider_factory=Provider):
         context["visible_product_ids"] = [p for p in context["visible_product_ids"] if p in valid_ids]
         try:
             async with session.lock:
+                if body.language is not None:
+                    session.language = body.language
                 return await asyncio.wait_for(agent.reply(session, body.message.strip(), context), timeout=120)
         except (ProviderError, asyncio.TimeoutError) as error:
             raise HTTPException(502, str(error) or "The request timed out. Please try again.") from None

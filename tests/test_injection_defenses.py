@@ -81,7 +81,7 @@ def test_navigation_confirmation_is_exact_session_bound_and_single_use(navigatio
     assert client.post("/api/navigation/confirm", json={"proposal_id": "not-a-real-proposal-id"}).status_code == 409
 
 
-@pytest.mark.parametrize("invalidate", ["next_turn", "reset", "configure", "expiry"])
+@pytest.mark.parametrize("invalidate", ["next_turn", "reset", "configure", "language", "expiry"])
 def test_navigation_proposals_expire_and_cannot_survive_context_changes(navigation_client, invalidate):
     client, app = navigation_client
     identity = propose(client)
@@ -91,6 +91,8 @@ def test_navigation_proposals_expire_and_cannot_survive_context_changes(navigati
         client.post("/api/chat/reset", json={})
     elif invalidate == "configure":
         client.post("/api/config", json={})
+    elif invalidate == "language":
+        client.post("/api/language", json={"language": "pt-BR"})
     else:
         session = next(iter(app.state.sessions.items.values()))
         session.pending_navigation[identity]["expires"] = time.monotonic() - 1

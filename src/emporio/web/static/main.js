@@ -1,7 +1,10 @@
 import {$,state,api,esc,money,showDialog,toast} from "./api.js";
 import {renderCategories,loadProducts,wireCatalogue} from "./catalogue.js";
 import {wireChat} from "./chat.js";
+import {getLanguage,setLanguage,startLocalization,localize,setLanguageBusy} from "./i18n.js";
 import {wireProductPages,renderProductRoute} from "./product-page.js";
+
+startLocalization();
 
 function updateMode(config) {
  state.config=config;
@@ -56,8 +59,22 @@ $("#open-tools").addEventListener("click",async()=>{
  catch(error){toast(error.message);}
 });
 wireCatalogue();wireChat();wireProductPages();
+document.querySelectorAll("[data-language]").forEach(button=>button.addEventListener("click",async()=>{
+ if(state.busy||button.dataset.language===getLanguage())return;
+ state.languageBusy=true;setLanguageBusy(true);$("#send-button").disabled=true;
+ try{
+  const result=await api("/api/language",{language:button.dataset.language});
+  state.language=result.language;setLanguage(result.language);
+  renderCategories();await loadProducts();
+  if(state.selected)state.selected=state.cache.get(state.selected.product_id)??state.selected;
+  await renderProductRoute();
+  updateMode(state.config);localize();
+  toast(result.language==="pt-BR"?"Português (Brasil) ativo. As próximas respostas serão em português.":"English active. Future replies will be in English.");
+ }catch(error){toast(error.message);}
+ finally{state.languageBusy=false;setLanguageBusy(false);$("#send-button").disabled=state.busy;}
+}));
 document.addEventListener("category-state-changed",renderCategories);
 document.addEventListener("collection-requested",()=>{renderCategories();loadProducts();});
-try{const boot=await api("/api/bootstrap");state.categories=boot.categories;$("#total-count").textContent=boot.product_count;
+try{await api("/api/language",{language:getLanguage()});const boot=await api("/api/bootstrap");state.categories=boot.categories;$("#total-count").textContent=boot.product_count;
  updateMode(boot.config);renderCategories();await loadProducts();await renderProductRoute();}
 catch(error){toast(error.message);$("#result-count").textContent="Server unavailable";}

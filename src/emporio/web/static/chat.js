@@ -1,5 +1,6 @@
 import {$,state,api,esc,money,context,announceContext,toast} from "./api.js";
 import {selectProduct,renderCategories,loadProducts} from "./catalogue.js";
+import {getLanguage,text as localText,setLanguageBusy} from "./i18n.js";
 import {productQuestions} from "./product-page.js";
 
 function renderProductQuestions(product) {
@@ -30,14 +31,14 @@ function addMessage(role,text) {
  $("#messages").scrollTop=$("#messages").scrollHeight;return node;
 }
 export async function sendMessage(text) {
- if(state.busy||!text.trim())return;
+ if(state.busy||state.languageBusy||!text.trim())return;
  document.querySelectorAll(".navigation-proposal").forEach(button=>button.disabled=true);
- state.busy=true;$("#send-button").disabled=true;$("#chat-input").value="";
+ state.busy=true;setLanguageBusy(true);$("#send-button").disabled=true;$("#chat-input").value="";
  if($("#suggestions"))$("#suggestions").hidden=true;addMessage("user",text);
- const pending=addMessage("assistant","Looking into that…");pending.classList.add("thinking");
+ const pending=addMessage("assistant",localText("Looking into that…"));pending.classList.add("thinking");
  try{
-   const result=await api("/api/chat",{message:text,context:context()});
-   pending.remove();const node=addMessage("assistant",result.answer);
+   const result=await api("/api/chat",{message:text,context:context(),language:getLanguage()});
+   pending.remove();const node=addMessage("assistant",result.answer);node.lang=result.language??getLanguage();
    for(const p of result.products) {
     state.cache.set(p.product_id,p);
     const b=document.createElement("button");b.className="chat-product";
@@ -73,19 +74,23 @@ export async function sendMessage(text) {
    }
    $("#messages").scrollTop=$("#messages").scrollHeight;
  }catch(error){pending.remove();addMessage("assistant",error.message).classList.add("error-message");}
- finally{state.busy=false;$("#send-button").disabled=false;$("#chat-input").focus();}
+ finally{state.busy=false;setLanguageBusy(false);$("#send-button").disabled=false;$("#chat-input").focus();}
 }
 export function wireChat() {
+ document.addEventListener("language-changed",()=>{
+  document.querySelectorAll(".navigation-proposal").forEach(button=>{button.disabled=true;button.textContent=localText("Suggestion no longer available");});
+  if(state.selected&&!$("#product-questions").hidden)renderProductQuestions(state.selected);
+ });
  $("#chat-form").addEventListener("submit",event=>{event.preventDefault();sendMessage($("#chat-input").value);});
  $("#chat-input").addEventListener("keydown",event=>{if(event.key==="Enter"&&!event.shiftKey){event.preventDefault();sendMessage($("#chat-input").value);}});
- document.querySelectorAll("[data-prompt]").forEach(b=>b.addEventListener("click",()=>sendMessage(b.dataset.prompt)));
+ document.querySelectorAll("[data-prompt]").forEach(b=>b.addEventListener("click",()=>sendMessage(localText(b.dataset.prompt))));
  document.addEventListener("prepare-product-chat",event=>prepareProductChat(event.detail));
  $("#chat-menu").addEventListener("click",()=>{const open=$("#chat-actions").hidden;$("#chat-actions").hidden=!open;$("#chat-menu").setAttribute("aria-expanded",String(open));});
  $("#reset-chat").addEventListener("click",async()=>{
   if(state.busy)return;
   try{await api("/api/chat/reset",{});$("#messages").querySelectorAll(".message").forEach(message=>message.remove());
    document.querySelectorAll(".navigation-proposal").forEach(button=>button.remove());
-   addMessage("assistant","A fresh start. What would you like to explore?");$("#chat-actions").hidden=true;}
+   addMessage("assistant",localText("A fresh start. What would you like to explore?"));$("#chat-actions").hidden=true;}
   catch(error){toast(error.message);}
  });
  $("#export-chat").addEventListener("click",()=>{const link=document.createElement("a");link.href="/api/chat/export";link.download="conversation.md";link.click();});

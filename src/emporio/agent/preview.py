@@ -20,12 +20,12 @@ def plan_preview(message, context):
         return ("get_order", {"order_id": int(match.group())}) if match else (None, {})
     if context.get("selected_product_id") and any(word in text for word in [
         "this instrument", "selected", "specification", "materials", "electronics",
-        "sound-related", "build", "how many", "stock",
+        "sound-related", "build", "how many", "stock", "instrumento", "especificacoes", "materiais", "eletronica", "som", "estoque", "disponivel",
     ]):
-        focus = ("sound" if any(w in text for w in ["sound-related", "electronics"])
-                 else "specifications" if any(w in text for w in ["specification", "materials", "build"])
-                 else "availability" if any(w in text for w in ["available", "stock", "how many"])
-                 else "price" if any(w in text for w in ["cost", "price", "pix"]) else "overview")
+        focus = ("sound" if any(w in text for w in ["sound-related", "electronics", "som", "eletronica"])
+                 else "specifications" if any(w in text for w in ["specification", "materials", "build", "especificacoes", "materiais", "construcao"])
+                 else "availability" if any(w in text for w in ["available", "stock", "how many", "disponivel", "estoque", "quantas"])
+                 else "price" if any(w in text for w in ["cost", "price", "pix", "preco", "custa"]) else "overview")
         return "get_product", {"product_id": context["selected_product_id"], "focus": focus,
                                "payment": "pix" if "pix" in text else context.get("payment", "unspecified")}
     category = next((cid for word, cid in {

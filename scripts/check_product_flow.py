@@ -42,6 +42,19 @@ def main():
         expect(page.locator("#product-store-policies")).to_contain_text("Warranty")
         expect(page.locator("#product-buying")).to_contain_text("not recorded")
         assert len(requests)==1
+        assert page.locator("#page-ask-product").count()==0
+        assert page.locator("#page-own-question").count()==1
+        page.locator("#product-page h1").evaluate("element=>element.dataset.navigationProbe='preserved'")
+        for target in ["product-overview","product-specs","product-buying","product-store-policies"]:
+            link=page.locator('.product-section-links a[href="#'+target+'"]')
+            link.click()
+            expect(page).to_have_url(BASE+"/products/81#"+target)
+            expect(link).to_have_attribute("aria-current","location")
+            expect(page.locator("#"+target)).to_be_focused()
+            expect(page.locator("#"+target+" h2")).to_be_in_viewport()
+            expect(page.locator("#product-page h1")).to_have_attribute("data-navigation-probe","preserved")
+        assert len(requests)==1
+        page.locator('.product-section-links a[href="#product-overview"]').click()
         page.screenshot(path=str(ROOT/".runtime/product-page-desktop.png"))
         page.locator('#product-page [data-question="1"]').click()
         expect(page.locator("#chat-input")).to_be_focused()
@@ -62,7 +75,13 @@ def main():
         expect(page.locator("#product-page h1")).to_have_text("Yamaha C40 Nylon Natural")
         page.reload(wait_until="networkidle")
         expect(page.locator("#product-page h1")).to_have_text("Yamaha C40 Nylon Natural")
+        page.goto(BASE+"/products/81#product-specs",wait_until="networkidle")
+        expect(page.locator("#product-specs")).to_be_focused()
+        expect(page.locator('.product-section-links a[href="#product-specs"]')).to_have_attribute("aria-current","location")
         page.set_viewport_size({"width":390,"height":844})
+        page.locator('.product-section-links a[href="#product-buying"]').click()
+        expect(page.locator("#product-buying")).to_be_focused()
+        expect(page.locator("#product-buying h2")).to_be_in_viewport()
         assert page.evaluate("document.documentElement.scrollWidth <= innerWidth")
         page.screenshot(path=str(ROOT/".runtime/product-page-mobile.png"))
         page.locator("#page-own-question").click()
@@ -70,7 +89,7 @@ def main():
         expect(page.locator("#chat-input")).to_have_value("")
         expect(page.locator("#chat-input")).to_be_in_viewport(timeout=5000)
         assert len(requests)==2
-        page.locator("#page-ask-product").click()
+        page.locator("#page-own-question").click()
         expect(page.locator("#product-questions")).to_be_visible()
         assert len(requests)==2
         page.locator(".assistant-panel").screenshot(path=str(ROOT/".runtime/product-page-chat.png"))

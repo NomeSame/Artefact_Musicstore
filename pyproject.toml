@@ -18,6 +18,7 @@ namespaces = true
 
 [tool.setuptools.package-data]
 "emporio.web" = ["static/*"]
+"emporio.data" = ["*.json"]
 
 [tool.pytest.ini_options]
 pythonpath = ["src"]

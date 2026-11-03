@@ -75,4 +75,5 @@ def test_product_focus_is_validated_and_overview_preserves_source(app):
     assert invalid["error"] == "invalid_arguments"
     result = tools.execute("get_product", {"product_id": 81, "focus": "overview"})
     assert result["focus"] == "overview"
-    assert result["product"]["description"] in render_result("get_product", result)
+    assert "Classical guitar with a spruce top" in render_result("get_product", result)
+    assert result["product"]["description"] in render_result("get_product", result, "pt-BR")

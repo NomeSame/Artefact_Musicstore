@@ -6,6 +6,7 @@ from dataclasses import dataclass, field
 
 @dataclass
 class Session:
+    language: str = "en"
     base_url: str = ""
     model: str = ""
     api_key: str = field(default="", repr=False)

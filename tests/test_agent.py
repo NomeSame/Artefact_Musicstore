@@ -173,3 +173,40 @@ def test_greeting_is_warm_without_displaying_ungrounded_model_claims(app):
     assert "Hi again!" in second["answer"]
     preview = asyncio.run(agent.reply(Session(), "hey", {}))
     assert "not a connected AI model" in preview["answer"]
+
+
+@pytest.mark.parametrize("message,show_overview", [
+    ("What warranty information is available for this instrument?", False),
+    ("Give me an overview and the warranty information for this instrument.", True),
+])
+def test_policy_reply_omits_context_overview_unless_requested(app, message, show_overview):
+    tools = app.state.tools
+    calls = [{"name": "lookup_policy", "result": tools.execute("lookup_policy", {"topic": "warranty"})},
+        {"name": "get_product", "result": tools.execute("get_product", {"product_id": 145, "focus": "overview"})}]
+    from emporio.agent.engine import render_grounded
+    answer = render_grounded(calls, message)
+    assert "90 days" in answer
+    assert ("Recorded details" in answer) is show_overview
+    assert ("Fender Stratocaster electric guitar" in answer) is show_overview
+
+
+def test_focused_product_reply_omits_redundant_search_count(app):
+    from emporio.agent.engine import render_grounded
+    tools = app.state.tools
+    product = tools.execute("get_product", {"product_id": 145, "focus": "sound"})
+    search = {"products": [product["product"]], "count": 1}
+    answer = render_grounded([{"name": "search_products", "result": search},
+        {"name": "get_product", "result": product}], "What sound-related specifications are recorded?")
+    assert "matching instrument" not in answer
+    assert "Mahogany" not in answer  # Fender source must not inherit another product's details.
+    assert "Please, ask the team about a listening demo or trying it in person." in answer
+
+
+def test_search_results_for_other_products_are_not_hidden(app):
+    from emporio.agent.engine import render_grounded
+    tools = app.state.tools
+    product = tools.execute("get_product", {"product_id": 145, "focus": "sound"})
+    search = {"products": [product["product"], tools.catalog.product(81)], "count": 2}
+    answer = render_grounded([{"name": "search_products", "result": search},
+        {"name": "get_product", "result": product}])
+    assert "2 matching instruments" in answer
