@@ -7,6 +7,7 @@ from emporio.domain.product_information import product_information
 from emporio.data.catalog import normalize
 from emporio.domain.language import translate, product_for_language, POLICIES_PT, CATEGORY_PT
 from emporio.agent.preview import plan_preview
+from emporio.domain.policy_details import detail_keys, DETAILS
 from emporio.integrations.provider import Provider, ProviderError
 
 SYSTEM = """You are the helpful, relaxed but professional assistant for Empório da Música.
@@ -22,6 +23,9 @@ Explicit user references override context. A category does not identify one prod
 Ask when ambiguous. Do not claim a purchase, refund, complaint or shipment was performed.
 Order data needs verification through the UI. Never request passwords or card details.
 Use lookup_policy before policy explanations. Use get_product or search_products for instrument facts.
+Answer only the requested policy details. Do not add prices, specifications or other policy topics unless asked.
+For mixed PIX/card payment, no full-PIX discount applies. An eligible product promotion is separate.
+Bank-financed PIX can qualify when the store receives the full amount immediately.
 For a warranty, returns or delivery question, answer that policy without an unrelated product overview.
 Product lookup may establish context, but only give an overview when the customer asks for one.
 Use navigate_catalog only to propose a category or product requested by the customer.
@@ -35,7 +39,7 @@ Dates in the snapshot are historical, not live updates."""
 
 def render_result(name, result, language="en"):
     if name == "lookup_policy" and result.get("found") and language == "pt-BR":
-        return POLICIES_PT[result["topic"]]
+        return result.get("summary_pt", POLICIES_PT[result["topic"]])
     if result.get("product"):
         result = {**result, "product": product_for_language(result["product"], language)}
     return translate(_render_result(name, result), language)
@@ -89,9 +93,16 @@ def friendly_fallback(message, has_history=False):
             "What would you like to explore?")
 
 
+def policy_only_question(trace, message):
+    return (any(t["name"] == "lookup_policy" and t["result"].get("focuses") for t in trace)
+            and not re.search(r"\b(price|cost|preco|custa|specifications|specs|especificacoes)\b", normalize(message)))
+
+
 def render_grounded(trace, message="", language="en"):
     # Lookup establishes context without obliging the customer to read every result.
     has_policy = any(t["name"] == "lookup_policy" and t["result"].get("found") for t in trace)
+    # Narrow policy questions must not display unsolicited product/specification dumps.
+    policy_only = policy_only_question(trace, message)
     wants_overview = bool(re.search(r"\b(overview|description|describe|tell me about|visao geral|descricao|descreva)\b",
                                     normalize(message)))
     detailed_ids = {t["result"]["product"]["product_id"] for t in trace
@@ -100,6 +111,8 @@ def render_grounded(trace, message="", language="en"):
     for turn in trace:
         name, result = turn["name"], turn["result"]
         if name == "navigate_catalog":
+            continue
+        if policy_only and name != "lookup_policy":
             continue
         if (name == "get_product" and not result.get("error") and result.get("product")
                 and result.get("focus") == "overview" and has_policy and not wants_overview):
@@ -124,6 +137,14 @@ class Agent:
         navigation_targets = []
         read_cache = {}
         def execute(name, arguments):
+            arguments = dict(arguments)
+            if name == "lookup_policy":
+                # Ground specificity in the actual customer turn, not a model paraphrase.
+                arguments["question"] = message
+            if name in {"get_product", "search_products"} and "mixed_payment" in detail_keys(message):
+                # A model must not turn partial PIX into a full-PIX quote.
+                if arguments.get("payment") == "pix":
+                    arguments["payment"] = "card"
             # Request-local only. A later user message always reads fresh data.
             key = (name, json.dumps(arguments, sort_keys=True, separators=(",", ":")))
             cacheable = name in {"search_products", "get_product", "lookup_policy", "get_order"}
@@ -170,6 +191,11 @@ class Agent:
                 response = await provider.complete(session.model, messages, self.tools.model_schema())
                 calls = response.get("tool_calls") or []
                 if not calls:
+                    # A weak model may omit the policy tool altogether. Known detail
+                    # questions still read the manual through the same logged boundary.
+                    keys = detail_keys(message)
+                    if keys and not any(t["name"] == "lookup_policy" and t["result"].get("found") for t in trace):
+                        execute("lookup_policy", {"topic": DETAILS[keys[0]][0]})
                     grounded = [t for t in trace if t["name"] != "navigate_catalog"]
                     if grounded:
                         answer = render_grounded(trace, message, language)
@@ -201,6 +227,8 @@ class Agent:
             answer = translate(answer, language)
         elif not trace:
             answer = translate(answer, language)
+        if policy_only_question(trace, message):
+            products.clear()
         session.history.extend([{"role": "user", "content": message}, {"role": "assistant", "content": answer}])
         session.history = session.history[-20:]
         proposals = []

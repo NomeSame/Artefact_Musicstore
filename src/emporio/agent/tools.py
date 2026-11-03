@@ -18,6 +18,7 @@ class ProductInput(Input):
     payment: str = Field(default="unspecified", pattern="^(unspecified|pix|card|debit|boleto)$")
 class PolicyInput(Input):
     topic: str = Field(min_length=1, max_length=150)
+    question: str = Field(default="", max_length=4000)
 class OrderInput(Input):
     order_id: int = Field(ge=1)
 class NavigationInput(Input):
@@ -27,7 +28,7 @@ class NavigationInput(Input):
 DEFINITIONS = {
     "search_products": (SearchInput, "Find instruments by name, category, maximum BRL price and availability. Categories 1 electric guitars, 2 bass, 3 drums, 4 keys/pianos, 5 acoustic guitars, 6 woodwinds, 7 brass, 8 orchestral strings, 9 ukuleles. Use current category only for implicit references. Never invent product IDs."),
     "get_product": (ProductInput, "Get verified details for an existing product. Choose focus overview for its description, specifications for build/materials, sound for recorded sound/electronics facts, availability for stock, or price for a quote. PIX applies only when the store receives full immediate PIX payment. Never stack discounts."),
-    "lookup_policy": (PolicyInput, "Retrieve store policies with source PDF pages. Topics store, payments, returns, delivery, promotions, warranty, privacy. Use for factual policy answers."),
+    "lookup_policy": (PolicyInput, "Retrieve store policies with source PDF pages. Topics store, payments, returns, delivery, promotions, warranty, privacy. Include the customer's specific question to get only relevant details. Mixed PIX/card payments do not qualify for the full-PIX discount; bank-financed PIX can qualify if the store receives the full amount immediately. Use for factual policy answers."),
     "get_order": (OrderInput, "Read a specific order only after the customer has used the order number and email verification dialog. If not verified, request that dialog. Does not perform refunds, purchases or shipping updates."),
     "navigate_catalog": (NavigationInput, "Open a category or select an existing product in the visible catalogue. A selected product must belong to the requested category. This only proposes a navigation target. The customer must click the separately rendered Open button before the view changes. Never say navigation has already happened."),
 }
@@ -38,7 +39,9 @@ OUTPUT_FIELDS = {
     "get_product": {"found": {"type": "boolean"}, "product": {"type": ["object", "null"]},
                     "focus": {"enum": ["overview", "specifications", "sound", "availability", "price"]}},
     "lookup_policy": {"found": {"type": "boolean"}, "topic": {"type": "string"},
-                      "summary": {"type": "string"}, "sources": {"type": "array", "items": {
+                      "summary": {"type": "string"}, "summary_pt": {"type": "string"},
+                      "focuses": {"type": "array", "items": {"type": "string"}},
+                      "sources": {"type": "array", "items": {
                           "type": "object", "required": ["document", "page", "text"],
                           "properties": {"document": {"type": "string"}, "page": {"type": "integer"},
                                          "text": {"type": "string"}}}}},

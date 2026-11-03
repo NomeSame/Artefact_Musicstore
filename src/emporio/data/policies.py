@@ -23,7 +23,7 @@ ALIASES = {
 class Policies:
     def __init__(self, path: Path):
         self.pages = [re.sub(r"\s+", " ", p.extract_text()).strip() for p in PdfReader(path).pages]
-    def lookup(self, topic: str):
+    def lookup(self, topic: str, question: str = ""):
         topic = normalize(topic)
         key = next((k for k in TOPICS if k == topic), None)
         if not key:
@@ -31,7 +31,14 @@ class Policies:
         if not key:
             return {"found": False, "topics": list(TOPICS), "message": "Choose a store policy topic."}
         pages, summary = TOPICS[key]
+        from emporio.domain.policy_details import focused_policy
+        focused = focused_policy(question)
+        extra = {}
+        if focused:
+            pages, summary = focused.pop("pages"), focused.pop("summary")
+            extra = focused
         return {"found": True, "topic": key, "summary": summary,
+                **extra,
                 "sources": [{"document": "políticas_da_loja.pdf", "page": n,
                              "text": self.pages[n-1]} for n in pages],
                 "note": "Manual rules, not an independent legal assessment."}

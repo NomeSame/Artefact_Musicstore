@@ -1,9 +1,13 @@
 """Explicitly limited, deterministic preview. This is not an LLM."""
 import re
 from emporio.data.catalog import normalize
+from emporio.domain.policy_details import detail_keys, DETAILS
 
 def plan_preview(message, context):
     text = normalize(message)
+    focused = detail_keys(message)
+    if focused:
+        return "lookup_policy", {"topic": DETAILS[focused[0]][0], "question": message}
     topics = {
         "returns": ["return", "refund", "devol", "troca"],
         "store": ["hours", "open", "address", "horario", "endereco"],
