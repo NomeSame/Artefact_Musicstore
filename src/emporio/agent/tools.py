@@ -3,6 +3,7 @@ from typing import Literal
 from pydantic import BaseModel, ConfigDict, Field, ValidationError
 from emporio.data.catalog import Catalog
 from emporio.data.policies import Policies
+from emporio.domain.advice import compare
 
 class Input(BaseModel):
     model_config = ConfigDict(extra="forbid")
@@ -19,6 +20,15 @@ class ProductInput(Input):
 class PolicyInput(Input):
     topic: str = Field(min_length=1, max_length=150)
     question: str = Field(default="", max_length=4000)
+class ComparisonInput(Input):
+    product_ids: list[int] = Field(min_length=2, max_length=3)
+    max_price: float | None = Field(default=None, ge=0, le=10000000, allow_inf_nan=False)
+    string_type: Literal["nylon", "steel"] | None = None
+    electronics: bool | None = None
+    beginner: bool = False
+    use_case: Literal["home", "stage", "recording"] | None = None
+    focus: Literal["overall", "feel", "sound", "portability"] = "overall"
+    payment: Literal["unspecified", "pix", "card", "debit", "boleto"] = "unspecified"
 class OrderInput(Input):
     order_id: int = Field(ge=1)
 class NavigationInput(Input):
@@ -26,6 +36,7 @@ class NavigationInput(Input):
     product_id: int | None = Field(default=None, ge=1)
 
 DEFINITIONS = {
+    "compare_products": (ComparisonInput, "Compare two or three verified catalogue product IDs against explicit customer budget, string-type and built-in electronics preferences. Reuse the current comparison for follow-ups. Never infer a customer's preferences or product IDs. Missing electronics or strings are unknown, not absent. No claims about tone, playability or genre suitability from materials alone. Ask which models when ambiguous."),
     "search_products": (SearchInput, "Find instruments by name, category, maximum BRL price and availability. Categories 1 electric guitars, 2 bass, 3 drums, 4 keys/pianos, 5 acoustic guitars, 6 woodwinds, 7 brass, 8 orchestral strings, 9 ukuleles. Use current category only for implicit references. Never invent product IDs."),
     "get_product": (ProductInput, "Get verified details for an existing product. Choose focus overview for its description, specifications for build/materials, sound for recorded sound/electronics facts, availability for stock, or price for a quote. PIX applies only when the store receives full immediate PIX payment. Never stack discounts."),
     "lookup_policy": (PolicyInput, "Retrieve store policies with source PDF pages. Topics store, payments, returns, delivery, promotions, warranty, privacy. Include the customer's specific question to get only relevant details. Mixed PIX/card payments do not qualify for the full-PIX discount; bank-financed PIX can qualify if the store receives the full amount immediately. Use for factual policy answers."),
@@ -34,6 +45,9 @@ DEFINITIONS = {
 }
 
 OUTPUT_FIELDS = {
+    "compare_products": {"found": {"type": "boolean"}, "products": {"type": "array", "items": {"type": "object"}},
+                         "requirements": {"type": "object"}, "assessments": {"type": "array", "items": {"type": "object"}},
+                         "snapshot": {"type": "boolean"}, "source": {"type": "string"}},
     "search_products": {"found": {"type": "boolean"}, "products": {"type": "array", "items": {"type": "object"}},
                         "count": {"type": "integer"}, "snapshot": {"type": "boolean"}, "filters": {"type": "object"}},
     "get_product": {"found": {"type": "boolean"}, "product": {"type": ["object", "null"]},
@@ -74,6 +88,8 @@ class Tools:
             args = DEFINITIONS[name][0].model_validate(arguments).model_dump()
         except (ValidationError, TypeError):
             return {"error": "invalid_arguments", "message": "Arguments do not match the documented tool schema."}
+        if name == "compare_products":
+            return compare(self.catalog, **args)
         if name == "search_products":
             products = self.catalog.search(**args, limit=12)
             return {"found": bool(products), "products": products,

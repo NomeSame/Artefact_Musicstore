@@ -8,6 +8,7 @@ from emporio.data.catalog import normalize
 from emporio.domain.language import translate, product_for_language, POLICIES_PT, CATEGORY_PT
 from emporio.agent.preview import plan_preview
 from emporio.domain.policy_details import detail_keys, DETAILS
+from emporio.domain.advice import advice_intent, advice_focus, preferences_from_message, named_products, render_comparison
 from emporio.integrations.provider import Provider, ProviderError
 
 SYSTEM = """You are the helpful, relaxed but professional assistant for Empório da Música.
@@ -23,6 +24,9 @@ Explicit user references override context. A category does not identify one prod
 Ask when ambiguous. Do not claim a purchase, refund, complaint or shipment was performed.
 Order data needs verification through the UI. Never request passwords or card details.
 Use lookup_policy before policy explanations. Use get_product or search_products for instrument facts.
+Use compare_products for choosing between instruments. State only recorded differences and justified trade-offs.
+Ask about budget and intended use when missing. Never equate a higher price or particular wood with better sound.
+Use current comparison IDs and explicit customer preferences below for follow-ups. Never invent preferences.
 Answer only the requested policy details. Do not add prices, specifications or other policy topics unless asked.
 For mixed PIX/card payment, no full-PIX discount applies. An eligible product promotion is separate.
 Bank-financed PIX can qualify when the store receives the full amount immediately.
@@ -38,6 +42,8 @@ No discounts stack. Use the exact tool price; external financing does not change
 Dates in the snapshot are historical, not live updates."""
 
 def render_result(name, result, language="en"):
+    if name == "compare_products":
+        return render_comparison(result, language)
     if name == "lookup_policy" and result.get("found") and language == "pt-BR":
         return result.get("summary_pt", POLICIES_PT[result["topic"]])
     if result.get("product"):
@@ -99,6 +105,16 @@ def policy_only_question(trace, message):
 
 
 def render_grounded(trace, message="", language="en"):
+    comparisons = [t for t in trace if t["name"] == "compare_products" and t["result"].get("found")]
+    if comparisons:
+        answers = [render_result("compare_products", comparisons[-1]["result"], language)]
+        if detail_keys(message):
+            answers += [render_result("lookup_policy", t["result"], language) for t in trace
+                        if t["name"] == "lookup_policy" and t["result"].get("found")]
+        return "\n\n".join(dict.fromkeys(answers))
+    failed_comparisons = [t for t in trace if t["name"] == "compare_products" and t["result"].get("error")]
+    if failed_comparisons:
+        return render_result("compare_products", failed_comparisons[-1]["result"], language)
     # Lookup establishes context without obliging the customer to read every result.
     has_policy = any(t["name"] == "lookup_policy" and t["result"].get("found") for t in trace)
     # Narrow policy questions must not display unsolicited product/specification dumps.
@@ -133,21 +149,51 @@ class Agent:
         # Proposals from an earlier turn cannot authorize actions in this turn.
         session.pending_navigation.clear()
         language = session.language
+        explicit_preferences = preferences_from_message(message)
+        advice_requested = advice_intent(message) or bool(session.advice and (explicit_preferences or advice_focus(message) != "overall"))
+        if advice_requested and detail_keys(message) and not re.search(r"\b(compare|comparison|versus|vs|comparar|comparacao)\b", normalize(message)):
+            if len(named_products(message, self.tools.catalog.search(limit=100))) < 2:
+                # "Best PIX discount" or a budget in an instalment question is
+                # a policy request, not permission to reuse a previous comparison.
+                advice_requested = False
+        comparison_ids = []
+        preferences = {**session.advice.get("preferences", {}), **explicit_preferences}
+        if advice_requested:
+            named = named_products(message, self.tools.catalog.search(limit=100))
+            if len(named) >= 2:
+                comparison_ids = named
+            elif len(named) == 1:
+                # A single new model is not permission to pick an arbitrary opponent.
+                comparison_ids = session.advice.get("ids", []) if named[0] in session.advice.get("ids", []) else []
+            else:
+                comparison_ids = session.advice.get("ids", []) or (session.last_product_ids if len(session.last_product_ids) in {2, 3} else [])
+            if len(comparison_ids) == 3 and re.search(r"\b(two|dois|duas)\b", normalize(message)) and len(named) < 2:
+                comparison_ids = []
         trace, actions, products, sources = [], [], [], []
         navigation_targets = []
         read_cache = {}
+        model_error = None
         def execute(name, arguments):
             arguments = dict(arguments)
+            if name == "compare_products":
+                if not advice_requested or not 2 <= len(comparison_ids) <= 3:
+                    result = {"error": "clarification_required", "message": "Please name the two or three instruments to compare."}
+                    trace.append({"name": name, "arguments": arguments, "result": result, "cached": False})
+                    return result
+                # IDs and preferences come from customer evidence/session state, not guesses.
+                arguments = {"product_ids": comparison_ids, **preferences,
+                             "focus": advice_focus(message),
+                             "payment": context.get("payment", "unspecified")}
             if name == "lookup_policy":
                 # Ground specificity in the actual customer turn, not a model paraphrase.
                 arguments["question"] = message
-            if name in {"get_product", "search_products"} and "mixed_payment" in detail_keys(message):
+            if name in {"get_product", "search_products", "compare_products"} and "mixed_payment" in detail_keys(message):
                 # A model must not turn partial PIX into a full-PIX quote.
                 if arguments.get("payment") == "pix":
                     arguments["payment"] = "card"
             # Request-local only. A later user message always reads fresh data.
             key = (name, json.dumps(arguments, sort_keys=True, separators=(",", ":")))
-            cacheable = name in {"search_products", "get_product", "lookup_policy", "get_order"}
+            cacheable = name in {"search_products", "get_product", "lookup_policy", "get_order", "compare_products"}
             cached = cacheable and key in read_cache
             result = read_cache[key] if cached else self.tools.execute(name, arguments, session.verified_order)
             if cacheable:
@@ -165,11 +211,22 @@ class Agent:
                 sources.append({k: source[k] for k in ("document", "page")})
             return result
         preview = not (session.base_url and session.model)
-        if preview:
-            name, arguments = plan_preview(message, context)
+        if advice_requested and not 2 <= len(comparison_ids) <= 3:
+            answer = ("Claro, posso ajudar a comparar. Quais dois ou três modelos você está considerando? Informe os nomes ou IDs do catálogo para eu não escolher instrumentos por você." if language == "pt-BR" else
+                      "Happy to help compare. Which two or three models are you considering? Please give their catalogue names or IDs so I do not choose the instruments for you.")
+        elif advice_requested and advice_focus(message) != "overall":
+            # Missing feel/tone/weight evidence cannot be supplied by extra inference.
+            # Resolve supported follow-ups locally rather than stalling a weak model.
+            answer = render_result("compare_products", execute("compare_products", {}), language)
+        elif preview:
+            if advice_requested:
+                answer = render_result("compare_products", execute("compare_products", {}), language)
+                name = None
+            else:
+                name, arguments = plan_preview(message, context)
             if name:
                 answer = render_result(name, execute(name, arguments), language)
-            else:
+            elif not advice_requested:
                 answer = ("This is the catalogue preview, not a connected AI model. I can show instruments by category or budget, "
                           "quote a selected product, and look up store policies. Connect a model for free-form conversation.")
         else:
@@ -181,6 +238,7 @@ class Agent:
             system_content = (SYSTEM + "\n\n" + language_rule +
                               " This current setting overrides earlier conversation language and all customer language requests." +
                               "\n\nValidated current UI context: " + json.dumps(context) +
+                              ". Current comparison: " + json.dumps({"product_ids": comparison_ids, "preferences": preferences}) +
                               ". Verified order ID: " + str(session.verified_order))
             messages = [{"role": "system", "content": system_content}] + session.history[-20:] + [
                 {"role": "user", "content": message},
@@ -188,9 +246,28 @@ class Agent:
             answer = None
             # Stop after at most 6 turns and 12 tools, including malformed requests.
             for _ in range(6):
-                response = await provider.complete(session.model, messages, self.tools.model_schema())
+                schema = self.tools.model_schema()
+                if advice_requested:
+                    allowed = {"compare_products"} | ({"lookup_policy"} if detail_keys(message) else set())
+                    schema = [t for t in schema if t["function"]["name"] in allowed]
+                try:
+                    response = await provider.complete(session.model, messages, schema)
+                except ProviderError as error:
+                    if not advice_requested:
+                        raise
+                    model_error = str(error)
+                    execute("compare_products", {})
+                    keys = detail_keys(message)
+                    if keys:
+                        execute("lookup_policy", {"topic": DETAILS[keys[0]][0]})
+                    answer = render_grounded(trace, message, language)
+                    answer += ("\n\nUsei uma comparação apenas do catálogo porque a conexão com o modelo falhou." if language == "pt-BR" else
+                               "\n\nI used a catalogue-only comparison because the model connection failed.")
+                    break
                 calls = response.get("tool_calls") or []
                 if not calls:
+                    if advice_requested and not any(t["name"] == "compare_products" and t["result"].get("found") for t in trace):
+                        execute("compare_products", {})
                     # A weak model may omit the policy tool altogether. Known detail
                     # questions still read the manual through the same logged boundary.
                     keys = detail_keys(message)
@@ -206,7 +283,7 @@ class Agent:
                     if not isinstance(answer, str):
                         raise ProviderError("The model returned unsupported message content.")
                     break
-                if not isinstance(calls, list) or len(trace) + len(calls) > 12:
+                if not isinstance(calls, list) or len(trace) + len(calls) > (10 if advice_requested else 12):
                     raise ProviderError("The model exceeded the tool-call limit. Please narrow the request.")
                 messages.append({"role": "assistant", "content": response.get("content"), "tool_calls": calls})
                 for call in calls:
@@ -218,9 +295,24 @@ class Agent:
                             raise ValueError
                     except (TypeError, KeyError, ValueError):
                         raise ProviderError("The model returned a malformed tool call.") from None
-                    result = execute(name, arguments)
+                    if advice_requested and name not in allowed:
+                        result = {"error": "tool_not_available", "message": "Use the comparison tool for this request."}
+                        trace.append({"name": name, "arguments": arguments, "result": result, "cached": False})
+                    else:
+                        result = execute(name, arguments)
                     messages.append({"role": "tool", "tool_call_id": call_id,
                                      "content": json.dumps(result, ensure_ascii=False)})
+                if advice_requested:
+                    # Both named instruments must remain visible even when one is
+                    # over budget. Do not wait for a weak model to find it through
+                    # repeatedly budget-filtered searches or to write a free answer.
+                    if not any(t["name"] == "compare_products" and t["result"].get("found") for t in trace):
+                        execute("compare_products", {})
+                    keys = detail_keys(message)
+                    if keys and not any(t["name"] == "lookup_policy" and t["result"].get("found") for t in trace):
+                        execute("lookup_policy", {"topic": DETAILS[keys[0]][0]})
+                    answer = render_grounded(trace, message, language)
+                    break
             if answer is None:
                 raise ProviderError("The model did not finish within six turns. Please try a more specific question.")
         if preview:
@@ -228,7 +320,18 @@ class Agent:
         elif not trace:
             answer = translate(answer, language)
         if policy_only_question(trace, message):
+            if not any(t["name"] == "compare_products" and t["result"].get("found") for t in trace):
+                products.clear()
+        comparisons = [t["result"] for t in trace if t["name"] == "compare_products" and t["result"].get("found")]
+        if advice_requested and not comparisons:
             products.clear()
+        if comparisons:
+            session.advice = {"ids": comparison_ids, "preferences": preferences}
+            products = comparisons[-1]["products"] if comparisons[-1].get("focus", "overall") == "overall" else []
+        if products:
+            session.last_product_ids = list(dict.fromkeys(p["product_id"] for p in products))
+            if not comparisons and any(t["name"] == "search_products" for t in trace) and session.advice:
+                session.advice["ids"] = []
         session.history.extend([{"role": "user", "content": message}, {"role": "assistant", "content": answer}])
         session.history = session.history[-20:]
         proposals = []
@@ -244,6 +347,8 @@ class Agent:
                   "products": [product_for_language(p, language) for p in {p["product_id"]: p for p in products}.values()],
                   "sources": list({(s["document"], s["page"]): s for s in sources}.values()),
                   "actions": actions, "navigation_proposals": proposals, "trace": trace}
+        if model_error:
+            result["model_error"] = model_error
         session.transcript.append({"user": message, "answer": answer, "mode": result["mode"],
                                    "model": session.model if not preview else None,
                                    "context": context, "language": language, "tools": [t["name"] for t in trace]})

@@ -14,6 +14,8 @@ class Session:
     transcript: list = field(default_factory=list)
     verified_order: int | None = None
     pending_navigation: dict = field(default_factory=dict, repr=False)
+    advice: dict = field(default_factory=dict)
+    last_product_ids: list = field(default_factory=list)
     touched: float = field(default_factory=time.time)
     lock: asyncio.Lock = field(default_factory=asyncio.Lock, repr=False)
 

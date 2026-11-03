@@ -171,6 +171,8 @@ def create_app(root=ROOT, db_path=None, provider_factory=Provider):
             elif body.api_key is not None:
                 session.api_key = body.api_key.strip()
             session.history.clear()
+            session.advice.clear()
+            session.last_product_ids.clear()
             session.pending_navigation.clear()
             return public_config(session)
 
@@ -231,6 +233,8 @@ def create_app(root=ROOT, db_path=None, provider_factory=Provider):
         async with session.lock:
             session.history.clear()
             session.transcript.clear()
+            session.advice.clear()
+            session.last_product_ids.clear()
             session.pending_navigation.clear()
             session.verified_order = None
         return {"ok": True}

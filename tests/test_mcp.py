@@ -15,9 +15,13 @@ def test_stdio_handshake_and_public_tools():
                 await session.initialize()
                 tools=await session.list_tools()
                 names={tool.name for tool in tools.tools}
-                assert names=={"search_products","get_product","lookup_policy"}
+                assert names=={"search_products","get_product","lookup_policy","compare_products"}
                 result=await session.call_tool("get_product",{"product_id":81,"payment":"pix"})
                 assert not result.isError
                 assert '"product_id": 81' in result.content[0].text
                 assert '"price_cents": 56991' in result.content[0].text
+                comparison=await session.call_tool("compare_products",{"product_ids":[81,87],"max_price":650,"string_type":"nylon"})
+                assert not comparison.isError
+                assert comparison.structuredContent["assessments"][0]["checks"]["budget"] is True
+                assert comparison.structuredContent["assessments"][1]["checks"]["budget"] is False
     asyncio.run(run())
