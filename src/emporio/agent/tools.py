@@ -29,7 +29,7 @@ DEFINITIONS = {
     "get_product": (ProductInput, "Get verified details for an existing product. Choose focus overview for its description, specifications for build/materials, sound for recorded sound/electronics facts, availability for stock, or price for a quote. PIX applies only when the store receives full immediate PIX payment. Never stack discounts."),
     "lookup_policy": (PolicyInput, "Retrieve store policies with source PDF pages. Topics store, payments, returns, delivery, promotions, warranty, privacy. Use for factual policy answers."),
     "get_order": (OrderInput, "Read a specific order only after the customer has used the order number and email verification dialog. If not verified, request that dialog. Does not perform refunds, purchases or shipping updates."),
-    "navigate_catalog": (NavigationInput, "Open a category or select an existing product in the visible catalogue. A selected product must belong to the requested category. This changes navigation only."),
+    "navigate_catalog": (NavigationInput, "Open a category or select an existing product in the visible catalogue. A selected product must belong to the requested category. This only proposes a navigation target. The customer must click the separately rendered Open button before the view changes. Never say navigation has already happened."),
 }
 
 OUTPUT_FIELDS = {
@@ -44,7 +44,7 @@ OUTPUT_FIELDS = {
                                          "text": {"type": "string"}}}}},
     "get_order": {"found": {"type": "boolean"}, "order": {"type": ["object", "null"]},
                   "snapshot": {"type": "boolean"}},
-    "navigate_catalog": {"action": {"type": "object", "properties": {
+    "navigate_catalog": {"navigation_proposal": {"type": "object", "properties": {
         "category_id": {"type": ["integer", "null"]}, "product_id": {"type": ["integer", "null"]}}}},
 }
 def output_schema(name):
@@ -57,7 +57,7 @@ class Tools:
     def catalog_schema(self):
         return [{"name": name, "description": desc, "input_schema": model.model_json_schema(),
                  "output_schema": output_schema(name),
-                 "side_effects": "Browser navigation only." if name == "navigate_catalog" else "Read only.",
+                 "side_effects": "Navigation proposal only; a separate customer click is required." if name == "navigate_catalog" else "Read only.",
                  "access": "Verified order in the current browser session." if name == "get_order" else "Public catalogue or manual."}
                 for name, (model, desc) in DEFINITIONS.items()]
     def model_schema(self):
@@ -86,11 +86,13 @@ class Tools:
                 return {"error": "verification_required", "message": "Use the order lookup dialog with order number and matching email first."}
             return {"found": True, "order": self.catalog.order(args["order_id"]), "snapshot": True}
         if name == "navigate_catalog":
+            if args["category_id"] is None and args["product_id"] is None:
+                return {"error": "invalid_arguments", "message": "Choose a category or product to propose."}
             product = self.catalog.product(args["product_id"]) if args["product_id"] else None
             if args["product_id"] and not product:
                 return {"error": "not_found", "message": "Unknown product."}
             if product and args["category_id"] and product["category_id"] != args["category_id"]:
                 return {"error": "category_mismatch", "message": "That product is in a different category."}
-            return {"action": {"category_id": product["category_id"] if product else args["category_id"],
+            return {"navigation_proposal": {"category_id": product["category_id"] if product else args["category_id"],
                                "product_id": args["product_id"]}}
         return {"error": "unknown_tool"}

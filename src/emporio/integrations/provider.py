@@ -54,7 +54,7 @@ class Provider:
     async def complete(self, model, messages, tools):
         result = await self.request("POST", "/chat/completions", {
             "model": model, "messages": messages, "tools": tools, "tool_choice": "auto",
-            "stream": False,
+            "stream": False, "max_tokens": 2048,
         })
         try:
             message = result["choices"][0]["message"]

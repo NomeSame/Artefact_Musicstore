@@ -18,7 +18,7 @@ function renderProductQuestions(product) {
 function prepareProductChat({product,prompt=""}) {
  state.selected=product;state.category=product.category_id;announceContext();
  renderProductQuestions(product);$("#product-questions").hidden=false;
- $("#suggestions").hidden=true;$("#chat-input").value=prompt;
+ if($("#suggestions"))$("#suggestions").hidden=true;$("#chat-input").value=prompt;
  document.querySelector(".assistant-panel").scrollIntoView({behavior:"smooth",block:"start"});
  $("#chat-input").focus({preventScroll:true});
 }
@@ -31,8 +31,9 @@ function addMessage(role,text) {
 }
 export async function sendMessage(text) {
  if(state.busy||!text.trim())return;
+ document.querySelectorAll(".navigation-proposal").forEach(button=>button.disabled=true);
  state.busy=true;$("#send-button").disabled=true;$("#chat-input").value="";
- $("#suggestions").hidden=true;addMessage("user",text);
+ if($("#suggestions"))$("#suggestions").hidden=true;addMessage("user",text);
  const pending=addMessage("assistant","Looking into that…");pending.classList.add("thinking");
  try{
    const result=await api("/api/chat",{message:text,context:context()});
@@ -52,12 +53,23 @@ export async function sendMessage(text) {
     const pre=document.createElement("pre");pre.textContent=JSON.stringify(result.trace.map(t=>({tool:t.name,arguments:t.arguments,cached:Boolean(t.cached),error:t.result.error??null})),null,2);
     details.append(summary,pre);node.append(details);
    }
-   for(const action of result.actions) {
-    state.category=action.category_id;state.selected=null;
-    $("#search").value="";$("#max-price").value="";
-    renderCategories();await loadProducts();
-    if(action.product_id)selectProduct(action.product_id,false);
-    announceContext();
+   // Model-suggested navigation is never applied automatically.
+   for(const proposal of result.navigation_proposals??[]) {
+    const button=document.createElement("button");button.type="button";button.className="chat-product navigation-proposal";
+    button.textContent="Open "+proposal.label;
+    button.addEventListener("click",async()=>{
+     if(state.busy)return;
+     button.disabled=true;
+     try{
+      const {action}=await api("/api/navigation/confirm",{proposal_id:proposal.id});
+      state.category=action.category_id;state.selected=null;
+      $("#search").value="";$("#max-price").value="";
+      renderCategories();await loadProducts();
+      if(action.product_id)await selectProduct(action.product_id,false);
+      announceContext();button.textContent="Opened "+proposal.label;
+     }catch(error){toast(error.message);button.textContent="Suggestion no longer available";}
+    });
+    node.append(button);
    }
    $("#messages").scrollTop=$("#messages").scrollHeight;
  }catch(error){pending.remove();addMessage("assistant",error.message).classList.add("error-message");}
@@ -71,7 +83,9 @@ export function wireChat() {
  $("#chat-menu").addEventListener("click",()=>{const open=$("#chat-actions").hidden;$("#chat-actions").hidden=!open;$("#chat-menu").setAttribute("aria-expanded",String(open));});
  $("#reset-chat").addEventListener("click",async()=>{
   if(state.busy)return;
-  try{await api("/api/chat/reset",{});$("#messages").innerHTML="";addMessage("assistant","A fresh start. What would you like to explore?");$("#chat-actions").hidden=true;}
+  try{await api("/api/chat/reset",{});$("#messages").querySelectorAll(".message").forEach(message=>message.remove());
+   document.querySelectorAll(".navigation-proposal").forEach(button=>button.remove());
+   addMessage("assistant","A fresh start. What would you like to explore?");$("#chat-actions").hidden=true;}
   catch(error){toast(error.message);}
  });
  $("#export-chat").addEventListener("click",()=>{const link=document.createElement("a");link.href="/api/chat/export";link.download="conversation.md";link.click();});

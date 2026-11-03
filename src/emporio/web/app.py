@@ -1,5 +1,6 @@
 """Loopback-only web API and static UI."""
 import asyncio
+import time
 from pathlib import Path
 from typing import Literal
 from fastapi import FastAPI, Request, Response, HTTPException, Depends
@@ -35,6 +36,10 @@ class Context(BaseModel):
 class ChatInput(BaseModel):
     message: str = Field(min_length=1, max_length=3000)
     context: Context = Field(default_factory=Context)
+
+class NavigationConfirmation(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    proposal_id: str = Field(min_length=20, max_length=100)
 
 class OrderVerification(BaseModel):
     order_id: int = Field(ge=1)
@@ -152,6 +157,7 @@ def create_app(root=ROOT, db_path=None, provider_factory=Provider):
             elif body.api_key is not None:
                 session.api_key = body.api_key.strip()
             session.history.clear()
+            session.pending_navigation.clear()
             return public_config(session)
 
     @app.post("/api/models")
@@ -181,6 +187,19 @@ def create_app(root=ROOT, db_path=None, provider_factory=Provider):
         except (ProviderError, asyncio.TimeoutError) as error:
             raise HTTPException(502, str(error) or "The request timed out. Please try again.") from None
 
+    @app.post("/api/navigation/confirm")
+    async def confirm_navigation(body: NavigationConfirmation, session=Depends(session_for)):
+        # The model cannot supply confirmation. Only this browser session can consume
+        # its short-lived, exact-target proposal. Client-supplied target overrides fail.
+        async with session.lock:
+            proposal = session.pending_navigation.pop(body.proposal_id, None)
+            if not proposal or proposal["expires"] <= time.monotonic():
+                raise HTTPException(409, "This suggestion expired. Ask for a new one.")
+            result = tools.execute("navigate_catalog", proposal["target"])
+            if "navigation_proposal" not in result:
+                raise HTTPException(409, "This catalogue suggestion is no longer available.")
+            return {"action": result["navigation_proposal"]}
+
     @app.post("/api/orders/verify")
     async def verify_order(body: OrderVerification, session=Depends(session_for)):
         async with session.lock:
@@ -196,6 +215,7 @@ def create_app(root=ROOT, db_path=None, provider_factory=Provider):
         async with session.lock:
             session.history.clear()
             session.transcript.clear()
+            session.pending_navigation.clear()
             session.verified_order = None
         return {"ok": True}
 
