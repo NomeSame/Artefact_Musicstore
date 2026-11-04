@@ -67,3 +67,29 @@ dialog{border:1px solid var(--line);border-radius:10px;color:var(--ink);backgrou
 @media(max-width:720px){.header-actions{gap:8px}.language-switch{padding:3px;gap:2px}.language-switch button{min-width:30px;min-height:32px;padding:5px;font-size:9px}.masthead{padding-left:16px;padding-right:16px}.brand{font-size:26px;gap:9px}.header-actions>.quiet-button{font-size:10px;padding:9px}}
 
 @media(max-width:400px){.masthead{padding-left:12px;padding-right:12px}.masthead .brand{font-size:22px;gap:7px}.masthead .brandmark{width:35px;height:35px;font-size:26px}.masthead .brandmark span{font-size:21px}.masthead .brand-sub{font-size:7px;letter-spacing:2.7px}.header-actions{gap:6px}.header-actions>.quiet-button{max-width:96px;line-height:1.3}}
+/* Keep unresolved source conflicts visible beside product identity and facts. */
+.catalogue-warning {padding:12px 14px;border:1px solid #a86b21;border-radius:8px;background:#fff4d9;color:#654010;font-size:.88rem;line-height:1.5;}
+
+
+/* Released prototype illustrations (AI-generated, labelled) */
+.media-frame{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+.media-photo{margin:0;flex-direction:column;background:#fff;border-radius:3px}
+.product-art .media-frame{inset:8px}
+.product-photo{width:100%;height:100%;object-fit:contain;object-position:center;display:block}
+.ai-label{position:absolute;left:0;right:0;bottom:0;background:rgba(171,18,42,.93);color:#fff;
+ font-size:9.5px;line-height:1.2;padding:2px 5px;text-align:center;font-weight:500;border-radius:0 0 3px 3px}
+.detail-art .media-frame{position:relative;inset:auto;width:100%;height:300px;padding:0}
+.detail-art .ai-label{position:static;margin-top:6px;border-radius:3px;font-size:10px}
+.product-page-art .media-frame{position:relative;inset:auto;width:100%;height:100%;min-height:380px;padding:14px}
+.product-page-art .ai-label{position:static;margin-top:8px;border-radius:3px;font-size:10.5px}
+.media-vector{padding:0}
+.media-vector svg{width:100%;height:100%}
+@media(max-width:1200px){
+ .detail-art .media-frame{height:240px}
+ .product-page-art .media-frame{min-height:260px;padding:10px}
+}
+@media(max-width:720px){
+ .detail-art .media-frame{height:210px}
+ .product-page-art .media-frame{min-height:300px}
+ .ai-label{font-size:9px;padding:3px 4px}
+}

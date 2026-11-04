@@ -221,6 +221,15 @@ let active="en";
 try{if(localStorage.getItem("emporio-language")==="pt-BR")active="pt-BR";}catch{}
 export const getLanguage=()=>active;
 export function text(value) {
+ // Restored previews or cached cards may already contain the Portuguese notice.
+ // Normalize that notice before translating so EN can recover those old nodes too.
+ const imageNotice = "AI-generated illustration. It may differ from the actual product.";
+ const canonical = value.replaceAll(PT[imageNotice], imageNotice);
+ if(canonical.includes(imageNotice)) {
+  const notice = active === "pt-BR" ? PT[imageNotice] : imageNotice;
+  // Old image titles included untranslated review notes. Keep the customer notice.
+  return canonical.startsWith(imageNotice) ? notice : canonical.replaceAll(imageNotice, notice);
+ }
  if(active!=="pt-BR")return value;
  if(PT[value])return PT[value];
  if(value.includes("\n"))return value.split("\n").map(text).join("\n");
@@ -267,9 +276,9 @@ export function localize() {
  document.documentElement.lang=active;
  const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
  while(walker.nextNode())localizeNode(walker.currentNode);
- document.querySelectorAll("[placeholder],[aria-label],[title]").forEach(el=>{
+ document.querySelectorAll("[placeholder],[aria-label],[title],[alt]").forEach(el=>{
   const saved=attributes.get(el)??{};
-  for(const key of ["placeholder","aria-label","title"]){
+  for(const key of ["placeholder","aria-label","title","alt"]){
    if(!el.hasAttribute(key))continue;
    const current=el.getAttribute(key),old=saved[key];
    const source=old&&old.rendered===current?old.source:current;
