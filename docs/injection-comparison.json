@@ -454,9 +454,19 @@
     "One predefined sample per case is not a security guarantee and does not cover adaptive, multimodal or all data-exfiltration attacks."
   ],
   "final_stage": {
-    "status": "pending",
+    "status": "primary_and_longer_timeout_multiturn_reviews_recorded",
     "todo": "1.5",
-    "plan": "Finish the shop, review and harden findings, then repeat and compare without overwriting these stages."
+    "bonsai_report": "bonsai-injection-review-20261104.json",
+    "qwen_report": "qwen-injection-review-20261104.json",
+    "measurement_pair_completed": true,
+    "acceptance_complete": false,
+    "application_hashes_equal": true,
+    "plan": "Document or implement the chosen production deadline and output-limit behavior, retain the controlled-output boundary, and settle residual risks before final sign-off.",
+    "followup_report": "injection-followup-review-20261104.json",
+    "followup_chat_turns": 48,
+    "followup_timeout_errors": 0,
+    "followup_tool_format_errors": 1,
+    "legitimate_recoveries_completed": 16
   },
   "method_sources": [
     "https://cheatsheetseries.owasp.org/cheatsheets/LLM_Prompt_Injection_Prevention_Cheat_Sheet.html",
