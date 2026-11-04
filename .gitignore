@@ -33,3 +33,26 @@ dist/
 /src/emporio/web/static/products/137.jpg
 /src/emporio/web/static/products/139.jpg
 /src/emporio/web/static/products/140.jpg
+
+# Local editors, analysis caches and disposable development output.
+/.vscode/
+/.idea/
+/.agents/
+/.codex/
+/*.code-workspace
+/.mypy_cache/
+/.ruff_cache/
+/.coverage
+/.coverage.*
+/htmlcov/
+/coverage.xml
+/tmp/
+/output/
+*.log
+*.sqlite
+*.sqlite3
+*.sqlite3-shm
+*.sqlite3-wal
+*.tmp
+*.bak
+*.orig
