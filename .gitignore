@@ -22,6 +22,7 @@ test-results/
 build/
 dist/
 !docs/quality-notes.md
+!docs/development-record.md
 
 # Local image references, generation attempts, workflows and review evidence.
 # Published illustrations and their index remain versioned under static/products.
